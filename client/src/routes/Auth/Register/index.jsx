@@ -4,22 +4,31 @@ import './style.css'
 // import icons
 import { FaUserShield } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
-import { GoChevronRight } from "react-icons/go";
+import { MdChevronRight } from "react-icons/md";
+import { MdEmail } from "react-icons/md";
 
 import img1 from 'assets/logo.png'
 
-export default function Login() {
+export default function Register() {
     return (
-        <div className='loginPage flex'>
-            <div className='loginContainer flex'>
+        <div className='registerPage flex'>
+            <div className='registerContainer flex'>
                 <div className="formDiv flex">
                     <div className="headerDiv">
                         <img src={img1} alt="Logo" />
-                        <h3>Welcome Back!</h3>
+                        <h3>Let Us Know You!</h3>
                     </div>
 
                     <form action="" className='form grid'>
-                        <span className='showMessage'>Login status will go there</span>
+                        <span className='showMessage'>Register status will go there</span>
+
+                        <div className="inputDiv">
+                            <label htmlFor="email">Email</label>
+                            <div className="input flex">
+                                <MdEmail className='icon' />
+                                <input type="text" id='email' placeholder='Enter email' />
+                            </div>
+                        </div>
 
                         <div className="inputDiv">
                             <label htmlFor="username">Username</label>
@@ -37,14 +46,18 @@ export default function Login() {
                             </div>
                         </div>
 
-                        <button type='submit' className='btn flex'>
-                            <span>Login</span>
-                            <GoChevronRight className='icon' />
-                        </button>
+                        <div className="inputDiv">
+                            <label htmlFor="re-password">Repeat Password</label>
+                            <div className="input flex">
+                                <BsFillShieldLockFill className='icon' />
+                                <input type="text" id='re-password' placeholder='Enter repeat password' />
+                            </div>
+                        </div>
 
-                        <span className="forgotPassword">
-                            Forgot your password? <a href="#!">Click Here</a>
-                        </span>
+                        <button type='submit' className='btn flex'>
+                            <span>Register</span>
+                            <MdChevronRight className='icon' />
+                        </button>
                     </form>
                 </div>
             </div>

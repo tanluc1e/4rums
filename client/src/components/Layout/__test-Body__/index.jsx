@@ -6,13 +6,10 @@ import './style.css'
 
 export default function Body() {
     return (
-        <div className='mainContent'>
-            {/* <Header /> */}
-
-            <div className='bottom flex'>
-                <Listing />
-                <Activity />
-            </div>
+        <div className='bottom flex'>
+            <Listing />
+            <Activity />
         </div>
+
     )
 }

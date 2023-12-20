@@ -1,10 +1,12 @@
 import React from 'react'
 import './style.css'
+import { Toggle } from 'react-hook-theme';
+import Dropdown from './Dropdown';
 
 /* import icons */
 import { BiSearchAlt } from "react-icons/bi";
 import { TbMessageCircle } from "react-icons/tb";
-import { IoNotifications } from "react-icons/io5";
+import { RiNotification3Line } from "react-icons/ri";
 
 import { BsArrowRightShort } from "react-icons/bs";
 import { TiUserAdd } from "react-icons/ti";
@@ -18,7 +20,7 @@ export default function Header() {
 
                 {/* ------------------------ LOGGED IN ------------------------ */}
 
-                {/* <div className="title">
+                <div className="title">
                     <h1>Welcome to 4rums</h1>
                     <p>Hello TanLuc, Welcome back!</p>
                 </div>
@@ -28,34 +30,39 @@ export default function Header() {
                     <BiSearchAlt className='icon' />
                 </div>
 
-                <div className="adminDiv flex">
-                    <TbMessageCircle className='icon' />
-                    <IoNotifications className='icon' />
-                    <div className='adminImage'>
+                {/* <div className="avatarDiv flex">
+                    <RiNotification3Line className='icon' />
+                    <div className='avatarImage'>
                         <img src="https://api.dicebear.com/7.x/notionists-neutral/svg?seed=Rascal" alt="Avatar" />
                     </div>
                 </div> */}
+
+                <Dropdown />
 
 
 
                 {/* ------------------------ NOT LOGGED IN ------------------------ */}
 
-                <div className="title">
-                    <h1>Welcome to 4rums</h1>
-                    <p>Login to use many features!</p>
+                {/* <div className="title">
+                    <h1>Chào mừng bạn!</h1>
+                    <p>Đăng nhập để sử dụng nhiều tính năng hơn!</p>
                 </div>
+
+                <Toggle />
+
+                <Dropdown />
 
                 <div className="buttonDiv flex">
                     <Link to={"/login"} className='loginBtn btn flex'>
-                        <span>Login</span>
+                        <span>Đăng nhập</span>
                         <MdOutlineLogin className='icon' />
                     </Link>
 
                     <Link to={"/register"} className='signUpBtn btn flex'>
-                        <span>Sign Up</span>
+                        <span>Đăng ký</span>
                         <TiUserAdd className='icon' />
                     </Link>
-                </div>
+                </div> */}
             </div>
         </div>
     )

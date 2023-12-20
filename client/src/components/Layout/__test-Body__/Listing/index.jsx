@@ -46,7 +46,7 @@ export default function Listing() {
             <div className="sellers flex">
                 <div className="topSellers">
                     <div className="heading flex">
-                        <h3>Top Sellers</h3>
+                        <h3>Top Activity</h3>
                         <button className='btn flex'>
                             See All <BsArrowRightShort className='icon' />
                         </button>
@@ -62,9 +62,9 @@ export default function Listing() {
 
                         <div className="cardText">
                             <span>
-                                14.245 Plant sold <br />
+                                14.245 Points <br />
                                 <small>
-                                    21 Sellers <span className="date">7 Days</span>
+                                    21 User <span className="date">7 Days</span>
                                 </small>
                             </span>
                         </div>
@@ -73,7 +73,7 @@ export default function Listing() {
 
                 <div className="featuredSellers">
                     <div className="heading flex">
-                        <h3>Featured Sellers</h3>
+                        <h3>Top Uploads</h3>
                         <button className='btn flex'>
                             See All <BsArrowRightShort className='icon' />
                         </button>
@@ -89,9 +89,9 @@ export default function Listing() {
 
                         <div className="cardText">
                             <span>
-                                45.456 Plant sold <br />
+                                1.456 Boards <br />
                                 <small>
-                                    102 Sellers <span className="date">31 Days</span>
+                                    102 User <span className="date">31 Days</span>
                                 </small>
                             </span>
                         </div>

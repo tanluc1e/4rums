@@ -1,14 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 :root{
   --border-radius: 12px;
+  --border-radius-inner: calc(var(--border-radius) / 2);
+  --transition-background: background-color .2s;
 
   --accent-color: hsl(266, 42%, 59%);
   --accent-color-tint: hsl(266, 42%, 53%);
@@ -29,13 +31,15 @@
   --secondary-bg-tint-focus: #e0e0e0;
   --secondary-bg-muted: #e0e0e0;
   --form-border-color: #eeecec;
+  --form-border-color-active: var(--accent-color);
+  --boxShadow-color: hsl(0, 0%, 85%);
 
   --selection-text: #000000;
   --selection-bg: #dabfff;
 
   /* Font and Typography */
   --biggestFontSize: 2.5rem;
-  --mediumFontSize: 2rem;
+  --mediumFontSize: 2.3rem;
   --h1FontSize: 1.5rem;
   --h2FontSize: 1.25rem;
   --h3FontSize: 1rem;
@@ -54,6 +58,7 @@
   --secondary-bg-muted: #0c0c0e;
   --form-border-color: #161717;
   --form-border-color-active: var(--accent-color);
+  --boxShadow-color: hsl(0, 0%, 15%);
 
   --selection-text: #f2f2f2;
   --selection-bg: #563170;

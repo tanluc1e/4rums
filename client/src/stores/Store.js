@@ -1,49 +1,85 @@
-import { createContext, useReducer } from 'react';
-import jwtDecode from 'jwt-decode';
+import { createContext, useReducer, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+
+import { language } from 'utils/Util';
 
 import Reducer from './Reducer';
 
-const initialState = {
-    user: null
-}
-
+let user = null
+let token = null
 if (localStorage.getItem('token')) {
     const decodedToken = jwtDecode(localStorage.getItem('token'))
 
     if (decodedToken.exp * 1000 < Date.now()) {
         localStorage.removeItem('token')
+        localStorage.removeItem('userPicture')
     } else {
-        initialState.user = decodedToken
+        user = { ...decodedToken, picture: decodedToken.picture || null }
+        token = localStorage.getItem('token')
     }
 }
 
-const StoreContext = createContext({
-    user: null,
-    login: (userData) => { },
-    logout: () => { }
-})
+const lang = language()
+document.querySelector('html').lang = lang
 
-export default function Store({ children }) {
+const initialState = {
+    user,
+    token,
+    lang
+}
+
+export const StoreContext = createContext(initialState)
+
+const Store = ({ children }) => {
     const [state, dispatch] = useReducer(Reducer, initialState)
+    const [modalOpen, setModalOpen] = useState(false)
 
-    const login = (userData) => {
-        localStorage.setItem('token', userData.token)
+    const setLang = (payload) => {
+        localStorage.setItem('lang', payload)
+        document.querySelector('html').lang = payload
+        dispatch({
+            type: 'SET_LANG',
+            payload
+        })
+    }
+
+    const login = (payload) => {
+        localStorage.setItem('token', payload.accessToken)
+        localStorage.setItem('userPicture', payload.user?.picture || '')
+        dispatch({
+            type: 'SET_TOKEN',
+            payload: payload.accessToken
+        })
         dispatch({
             type: 'LOGIN',
-            payload: userData
+            payload: payload.user
         })
     }
 
     const logout = () => {
         localStorage.removeItem('token')
+        localStorage.removeItem('userPicture')
         dispatch({ type: 'LOGOUT' })
     }
 
+
+
+    const store = {
+        lang: state.lang,
+        setLang,
+        token: state.token,
+        user: state.user,
+        modalOpen,
+        setModalOpen,
+        login,
+        logout
+    }
+
     return (
-        <StoreContext.Provider value={{ user: state.user, login, logout }}>
+        <StoreContext.Provider value={store}>
             {children}
         </StoreContext.Provider>
     )
 };
 
-export { StoreContext };
+export default Store;

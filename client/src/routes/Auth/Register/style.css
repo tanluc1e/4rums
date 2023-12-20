@@ -1,12 +1,12 @@
-.loginPage{
+.registerPage{
     width: 100%;
     margin: auto;
     margin-top: 3rem;
     border-radius: 10px;
     overflow: hidden;
 
-    .loginContainer{
-        height: 75vh;
+    .registerContainer{
+        height: 100%;
         width: 100%;
         margin: auto;
         justify-content: space-between;
@@ -31,7 +31,7 @@
 
                 h3{
                     font-size: 25px;
-                    color: var(--blackColor);
+                    color: var(--main-text);
                     font-weight: 600;
                 }
             }
@@ -41,7 +41,7 @@
 
                 .inputDiv{
                     .icon{
-                        color: var(--greyText);
+                        color: var(--secondary-text);
 
                     }
 
@@ -53,7 +53,7 @@
                     }
 
                     label{
-                        color: var(--blackColor);
+                        color: var(--main-text);
                         font-weight: 400;
                         font-size: 14px;
                         padding: .5rem 0;
@@ -62,15 +62,15 @@
                     .input{
                         gap: .5rem;
                         padding: 1rem;
-                        background: var(--inputColor);
+                        background: var(--secondary-bg-tint);
                     }
                 }
 
                 .btn{
                     padding: .8rem;
-                    background: var(--PrimaryColor);
+                    background: var(--accent-color);
                     border-radius: 10px;
-                    color: var(--whiteColor);
+                    color: var(--main-text-light);
                     align-items: center;
                     margin: auto;
                     justify-content: center;
@@ -89,11 +89,11 @@
                     }
 
                     &:hover{
-                        background: var(--HoverColor);
-                        color: var(--blackColor);
+                        background: var(--accent-color-tint);
+                        color: var(--main-text);
 
                         .icon{
-                            color: var(--blackColor);
+                            color: var(--main-text);
                             transform: translateX(5px);
                         }
                     }
@@ -101,7 +101,7 @@
 
                 .forgotPassword{
                     font-size: 13px;
-                    color: var(--blackColor);
+                    color: var(--main-text);
                     opacity: .7;
                     text-align: center;
 
@@ -115,23 +115,11 @@
     }
 }
 
-.message{
-    display: none;
-}
-  
-.showMessage{
-    display: block;
-    color: var(--whiteColor);
-    padding: 10px;
-    border-radius: 3px;
-    background-color: var(--HoverColor);
-    text-align: center;
-}
 
 /* MEDIA QUERIES */
 @media screen and (max-width: 602px){
-    .loginPage{
-        .loginContainer{
+    .registerPage{
+        .registerContainer{
             height: 100%;
             width: 100%;
             flex-direction: column;

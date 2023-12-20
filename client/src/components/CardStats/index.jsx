@@ -12,12 +12,14 @@ export default function CardStats() {
     return (
         <div className="cardSection flex">
             <div className="rightCard flex">
-                <h1>Create and sell extraordinary products</h1>
-                <p>The world's fast growing industry today are natural made products!</p>
+                <h1>Join on The Events In the Community</h1>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Natus nulla quaerat libero vel laborum fugiat, dolorum et. Fugit velit, amet
+                    laboriosam, ad sed cumque itaque architecto quis quisquam expedita fugiat?</p>
 
                 <div className='buttons flex'>
-                    <button className='btn'>Explore More</button>
-                    <button className='btn transparent'>Top Sellers</button>
+                    <button className='btn'>Get Started</button>
+                    <button className='btn transparent'>See more</button>
                 </div>
 
                 <div className="videoDiv">
@@ -32,15 +34,15 @@ export default function CardStats() {
 
                         <div className='flex'>
                             <span>
-                                Today <br /> <small>4 Orders</small>
+                                Today <br /> <small>4 Boards</small>
                             </span>
                             <span>
-                                This Month <br /> <small>127 Orders</small>
+                                This Month <br /> <small>127 Boards</small>
                             </span>
                         </div>
 
                         <div className='flex link'>
-                            Go to my orders <BsArrowRightShort className='icon' />
+                            Activity history <BsArrowRightShort className='icon' />
                         </div>
                     </div>
 
@@ -56,7 +58,7 @@ export default function CardStats() {
                         <div className="circle2"></div>
 
                         <h3>Help Center</h3>
-                        <p>Having trouble in Plant, please contact us from for more questions.</p>
+                        <p>Having trouble in 4rums, please contact us from for more questions.</p>
                         <button className='btn'>Go to help center</button>
                     </div>
                 </div>

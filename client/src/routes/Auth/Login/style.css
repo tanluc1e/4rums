@@ -1,16 +1,16 @@
-.registerPage{
+.loginPage{
     width: 100%;
     margin: auto;
     margin-top: 3rem;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     overflow: hidden;
 
-    .registerContainer{
-        height: 75vh;
+    .loginContainer{
+        height: 100%;
         width: 100%;
         margin: auto;
         justify-content: space-between;
-        border-radius: 10px;
+        border-radius: var(--border-radius);
         background: hsl(0, 0, 91%);
 
         .formDiv{
@@ -31,7 +31,7 @@
 
                 h3{
                     font-size: 25px;
-                    color: var(--blackColor);
+                    color: var(--main-text);
                     font-weight: 600;
                 }
             }
@@ -41,8 +41,7 @@
 
                 .inputDiv{
                     .icon{
-                        color: var(--greyText);
-
+                        color: var(--secondary-text);
                     }
 
                     input{
@@ -50,27 +49,55 @@
                         outline: none;
                         border: none;
                         width: 300px;
+                        color: var(--main-text);
                     }
 
-                    label{
-                        color: var(--blackColor);
-                        font-weight: 400;
-                        font-size: 14px;
-                        padding: .5rem 0;
+                    .inputLabel{
+                        color: var(--main-text);
+                        font-weight: 500;
+                        padding: .3rem .0rem;
+                        user-select: none;
+                        margin: .3rem .2rem;
                     }
-
+                    
                     .input{
                         gap: .5rem;
                         padding: 1rem;
-                        background: var(--inputColor);
+                        background: var(--secondary-bg-tint);
+                    }
+
+                    .errorText{
+                        font-size: var(--smallFontSize);
+                        color: var(--main-danger-color);
+                        font-weight: 400;
+                        margin-left: .5rem;
+                    }
+
+                    .inputBorder{
+                        border: 2px solid transparent;
+                        border-radius: var(--border-radius);
+                        transition-duration: .2s;
+                        transition-property: border-color, background-color;
+                        overflow-wrap: anywhere;
+                        overflow: hidden;
+
+                        &:focus-within{
+                            border-color: var(--accent-color);
+                        }
+                    }
+    
+                    
+                    
+                    .inputBorder.error{
+                        border-color: var(--main-danger-color);
                     }
                 }
 
                 .btn{
                     padding: .8rem;
-                    background: var(--PrimaryColor);
-                    border-radius: 10px;
-                    color: var(--whiteColor);
+                    background: var(--accent-color);
+                    border-radius: var(--border-radius);
+                    color: var(--main-text-light);
                     align-items: center;
                     margin: auto;
                     justify-content: center;
@@ -89,11 +116,11 @@
                     }
 
                     &:hover{
-                        background: var(--HoverColor);
-                        color: var(--blackColor);
+                        background: var(--accent-color-tint);
+                        color: var(--main-text);
 
                         .icon{
-                            color: var(--blackColor);
+                            color: var(--main-text);
                             transform: translateX(5px);
                         }
                     }
@@ -101,7 +128,7 @@
 
                 .forgotPassword{
                     font-size: 13px;
-                    color: var(--blackColor);
+                    color: var(--main-text);
                     opacity: .7;
                     text-align: center;
 
@@ -110,28 +137,28 @@
                         cursor: pointer;
                     }
                 }
+
+                .message{
+                    display: none;
+                }
+                  
+                .showMessage{
+                    display: block;
+                    color: var(--secondary-text);
+                    padding: 10px;
+                    border-radius: var(--border-radius);
+                    background: var(--main-text);
+                    text-align: center;
+                }
             }
         }
     }
 }
 
-.message{
-    display: none;
-}
-  
-.showMessage{
-    display: block;
-    color: var(--whiteColor);
-    padding: 10px;
-    border-radius: 3px;
-    background-color: var(--HoverColor);
-    text-align: center;
-}
-
 /* MEDIA QUERIES */
 @media screen and (max-width: 602px){
-    .registerPage{
-        .registerContainer{
+    .loginPage{
+        .loginContainer{
             height: 100%;
             width: 100%;
             flex-direction: column;

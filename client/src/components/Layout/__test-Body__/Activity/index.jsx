@@ -19,7 +19,7 @@ export default function Activity() {
                     <img src="https://api.dicebear.com/7.x/lorelei-neutral/svg?seed=Misty" alt="Avatar" />
                     <div className="customerDetails">
                         <span className='name'>Ola Martha</span>
-                        <small>Ordered a new plant</small>
+                        <small>New board posted</small>
                     </div>
                     <div className="duration">
                         2 mins ago
@@ -30,7 +30,7 @@ export default function Activity() {
                     <img src="https://api.dicebear.com/7.x/lorelei-neutral/svg?seed=Abby" alt="Avatar" />
                     <div className="customerDetails">
                         <span className='name'>Ola Martha</span>
-                        <small>Ordered a new plant</small>
+                        <small>New board posted</small>
                     </div>
                     <div className="duration">
                         2 mins ago
@@ -41,7 +41,7 @@ export default function Activity() {
                     <img src="https://api.dicebear.com/7.x/lorelei-neutral/svg?seed=Sophie" alt="Avatar" />
                     <div className="customerDetails">
                         <span className='name'>Ola Martha</span>
-                        <small>Ordered a new plant</small>
+                        <small>New board posted</small>
                     </div>
                     <div className="duration">
                         2 mins ago
@@ -52,7 +52,7 @@ export default function Activity() {
                     <img src="https://api.dicebear.com/7.x/lorelei-neutral/svg?seed=Mia" alt="Avatar" />
                     <div className="customerDetails">
                         <span className='name'>Ola Martha</span>
-                        <small>Ordered a new plant</small>
+                        <small>New board posted</small>
                     </div>
                     <div className="duration">
                         2 mins ago

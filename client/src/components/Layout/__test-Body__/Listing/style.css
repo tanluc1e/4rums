@@ -5,19 +5,24 @@
         width: 100%;
         justify-content: space-between;
         
+        h3{
+            color: var(--main-text);
+        }
+        
         h1{
             font-size: var(--h2FontSize);
-            color: var(--blackColor);
+            color: var(--main-text);
             font-weight: 700;
         }
 
         .btn{
             border: 1px solid transparent;
             font-weight: 500;
+            background: transparent;
         }
 
         .btn:hover{
-            border: 1px solid var(--PrimaryColor);
+            border: 1px solid var(--accent-color);
         }
     }
 
@@ -36,12 +41,12 @@
             align-items: center;
             flex-direction: column;
             padding: 1rem;
-            border-radius: 10px;
-            background: var(--itemCardColor);
+            border-radius: var(--border-radius);
+            background: var(--secondary-bg);
 
             &:hover{
-                background: var(--itemCardHover);
-                box-shadow: 0 2px 2px var(--inputColor);
+                background: var(--secondary-bg-tint);
+                box-shadow: 0 2px 2px var(--secondary-bg-tint);
             }
 
             img{
@@ -52,12 +57,12 @@
                 position: absolute;
                 top: 10px;
                 right: 10px;
-                color: var(--PrimaryColor);
+                color: var(--accent-color);
             }
 
             h3{
                 font-size: var(--h3FontSize);
-                color: var(--blackColor);
+                color: var(--main-text);
                 padding: 1rem 0;
             }
         }
@@ -80,21 +85,20 @@
 
             .card{
                 padding: 1rem 1.5rem;
-                border-radius: 1rem;
-                background: var(--whiteColor);
+                border-radius: var(--border-radius);
+                background: var(--secondary-bg);
                 gap: 1rem;
-                box-shadow: 0 2px 4px var(--inputColor);
 
                 .users{
                     padding-right: 1rem;
-                    border-right: 2px solid var(--greyText);
+                    border-right: 2px solid var(--secondary-text);
 
                     img{
                         width: 30px;
                         height: 30px;
                         border-radius: 50%;
                         object-fit: cover;
-                        border: 2px solid var(--inputColor);
+                        border: 2px solid var(--secondary-bg-tint);
                         transition: .5s ease;
 
                         &:hover{
@@ -105,7 +109,7 @@
 
                 .cardText{
                     span{
-                        color: var(--blackColor);
+                        color: var(--main-text);
                         font-weight: 500;
 
                         small{

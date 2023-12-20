@@ -10,7 +10,7 @@
     .breadcrumbBody{
         display: flex;
         align-items: center;
-        color: var(--textColor);
+        color: var(--actions-color);
         overflow-x: auto;
         overflow-y: hidden;
         white-space: nowrap;
@@ -24,14 +24,14 @@
         scroll-snap-stop: always;
 
         .breadcrumbsLink{
-            color: var(--PrimaryColor);
+            color: var(--accent-color);
         }
 
         .breadcrumbsIcon{
             margin: 0 .4rem;
             font-size: .8rem;
             font-weight: 400;
-            color: var(--textColor);
+            color: var(--actions-color);
             position: relative;
             top: 1px;
             opacity: .8;

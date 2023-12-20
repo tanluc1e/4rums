@@ -5,69 +5,90 @@
         .title{
             h1{
                 font-size: var(--h1FontSize);
-                color: var(--blackColor);
+                color: var(--main-text);
                 font-weight: 700;
             }
 
             p{
                 font-size: var(--normalFontSize);
-                color: var(--textColor);
+                color: var(--actions-color);
                 font-weight: 500;
             }
         }
 
         .searchBar{
-            padding: 1rem 2rem;
-            background: var(--whiteColor);
-            border-radius: 5px;
+            padding: .6rem 1rem;
+            background: var(--secondary-bg-tint);
+            border-radius: 50px;
+            border: 2px solid transparent;
             gap: 1rem;
-            box-shadow: 0 2px 4px var(--inputColor);
+            box-shadow: 0 2px 4px var(--secondary-bg-tint);
 
             input{
+                color: var(--main-text);
                 border: none;
                 outline: none;
                 background: none;
             }
 
             .icon{
-                color: var(--textColor);
+                color: var(--actions-color);
 
                 &:hover{
-                    color: var(--PrimaryColor);
+                    color: var(--accent-color);
                 }
+            }
+
+            &:focus-within{
+                border-color: var(--form-border-color-active);
             }
         }
 
-        .adminDiv{
+        .avatarDiv{
             gap: 1rem;
 
             .icon{
-                font-size: var(--biggestFontSize);
-                background: var(--whiteColor);
+                font-size: var(--mediumFontSize);
                 border-radius: 50%;
                 padding: 5px;
-                box-shadow: 0 2px 4px var(--inputColor);
-                color: var(--textColor);
+                color: var(--main-text);
+
+                &:hover{
+                    background: var(--secondary-bg-tint-focus);
+                }
             }
 
-            .adminImage{
-                border: 3px solid var(--whiteColor);
+            .avatarImage{
+                width: 32px;
+                height: 32px;
                 border-radius: 50%;
-                width: 2.5rem;
-                height: 2.5rem;
                 overflow: hidden;
-                box-shadow: 0 2px 4px var(--inputColor);
+                margin-left: .8rem;
                 cursor: pointer;
+                box-shadow: 0px 0px 10px var(--accent-color);
 
                 img{
                     width: 100%;
                     height: 100%;
+                }
+
+                &:hover{
+                    box-shadow: 0px 0px 30px var(--accent-color-tint);
                 }
             }
         }
 
         .buttonDiv{
             gap: 1rem;
+
+            .loginBtn{
+                padding: 1rem 1.5rem;
+                background: var(--accent-color);
+                border-radius: var(--border-radius);
+                color: #fff;
+                font-weight: 500;
+                transition: .5s;
+            }
         }
     }
 }

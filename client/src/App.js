@@ -6,19 +6,28 @@ import Login from 'routes/Auth/Login';
 import Register from 'routes/Auth/Register';
 import Layout from 'components/Layout';
 
+import { ThemeProvider } from 'react-hook-theme';
+
 function App() {
   return (
-    <Store>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </Store>
+    <ThemeProvider
+      options={{
+        theme: 'dark',
+        save: true,
+      }}
+    >
+      <Store>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </Store>
+    </ThemeProvider>
   );
 }
 

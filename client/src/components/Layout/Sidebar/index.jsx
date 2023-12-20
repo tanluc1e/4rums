@@ -10,20 +10,20 @@ import { IoLayersOutline, IoLayers } from "react-icons/io5";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
 import { BsQuestionCircle } from "react-icons/bs";
 
-import logo from 'assets/logo.png'
+import logo from 'assets/fox.png'
 
 export default function Sidebar() {
     const location = useLocation();
 
     const menuItems = [
-        { title: 'Home', path: '/', icon: GoHome, selectIcon: GoHomeFill },
-        { title: 'All boards', path: '/boards', icon: MdOutlineDashboard, selectIcon: MdDashboard },
-        { title: 'Resources', path: '/files', icon: IoLayersOutline, selectIcon: IoLayers },
-        { title: 'User', path: '/user', icon: RiGroupLine, selectIcon: RiGroupFill },
+        { title: 'Trang Chính', path: '/', icon: GoHome, selectIcon: GoHomeFill },
+        { title: 'Bài Đăng', path: '/boards', icon: MdOutlineDashboard, selectIcon: MdDashboard },
+        { title: 'Tài Nguyên', path: '/files', icon: IoLayersOutline, selectIcon: IoLayers },
+        { title: 'Thành Viên', path: '/user', icon: RiGroupLine, selectIcon: RiGroupFill },
     ];
 
     const settingItems = [
-        { title: 'Accounts', path: '/accounts', icon: FaRegUserCircle, selectIcon: FaUserCircle }
+        { title: 'Tài Khoản', path: '/accounts', icon: FaRegUserCircle, selectIcon: FaUserCircle }
     ];
     return (
         <div className='sideBar grid'>
@@ -34,12 +34,12 @@ export default function Sidebar() {
 
             <div className='menuDiv'>
                 <h3 className='divTitle'>
-                    QUICK MENU
+                    THAO TÁC NHANH
                 </h3>
 
                 <ul className='menuLists grid'>
                     {menuItems.map((menu, index) => (
-                        <li className={`listItem ${location.pathname === menu.path && 'active'}`}>
+                        <li className={`listItem ${location.pathname === menu.path && 'active'}`} key={index}>
                             <Link to={menu.path} className='menuLink flex'>
                                 {location.pathname === menu.path ? <menu.selectIcon className='icon' /> : <menu.icon className='icon' />}
                                 <span className='smallText'>
@@ -55,12 +55,12 @@ export default function Sidebar() {
 
             <div className='settingsDiv'>
                 <h3 className='divTitle'>
-                    SETTINGS
+                    CÀI ĐẶT
                 </h3>
 
                 <ul className='menuLists grid'>
                     {settingItems.map((menu, index) => (
-                        <li className={`listItem ${location.pathname === menu.path && 'active'}`}>
+                        <li className={`listItem ${location.pathname === menu.path && 'active'}`} key={index}>
                             <Link to={menu.path} className='menuLink flex'>
                                 {location.pathname === menu.path ? <menu.selectIcon className='icon' /> : <menu.icon className='icon' />}
                                 <span className='smallText'>
@@ -78,9 +78,9 @@ export default function Sidebar() {
                     <div className="circle1"></div>
                     <div className="circle2"></div>
 
-                    <h3>Help Center</h3>
-                    <p>Having trouble in 4rums, please contact us from for more questions.</p>
-                    <button className='btn'>Go to help center</button>
+                    <h3>Trung Tâm Trợ Giúp</h3>
+                    <p>Gặp sự cố trong diễn đàn, vui lòng liên hệ với chúng tôi để được hỗ trợ.</p>
+                    <button className='btn'>Đi đến trung tâm</button>
                 </div>
             </div>
         </div>
