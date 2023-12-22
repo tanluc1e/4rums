@@ -6,6 +6,7 @@ import { useForm } from 'hooks/useForm';
 import Breadcrumbs from 'components/Breadcrumbs';
 import Input from 'components/Form/Input';
 import Alert from 'components/Alert';
+import Loader from 'components/Loader';
 import { logo } from 'assets';
 import './style.css'
 
@@ -127,9 +128,12 @@ export default function Login() {
                                 </div>
                             </div>
 
-                            <button type='submit' className='btn flex'>
-                                <span>Login</span>
-                            </button>
+                            {loading ?
+                                <Loader className="btn" /> :
+                                <button type='submit' className='btn flex'>
+                                    <span>{Strings.loginPage.submit.title[lang]}</span>
+                                </button>
+                            }
 
                             <span className="forgotPassword">
                                 {Strings.loginPage.forgotPassword.text[lang]} <a href="#!">{Strings.loginPage.forgotPassword.click[lang]}</a>

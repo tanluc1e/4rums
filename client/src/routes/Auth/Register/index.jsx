@@ -6,6 +6,7 @@ import { useForm } from 'hooks/useForm';
 import Breadcrumbs from 'components/Breadcrumbs';
 import Input from 'components/Form/Input';
 import Alert from 'components/Alert';
+import Loader from 'components/Loader';
 import { logo } from 'assets';
 import './style.css'
 
@@ -165,9 +166,12 @@ export default function Register() {
                                 </div>
                             </div>
 
-                            <button type='submit' className='btn flex'>
-                                <span>Register</span>
-                            </button>
+                            {loading ?
+                                <Loader className="btn" /> :
+                                <button type='submit' className='btn flex'>
+                                    <span>{Strings.registerPage.submit.title[lang]}</span>
+                                </button>
+                            }
 
                             <span className="forgotPassword">
                                 {Strings.registerPage.forgotPassword.text[lang]} <a href="#!">{Strings.registerPage.forgotPassword.click[lang]}</a>

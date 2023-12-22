@@ -157,6 +157,10 @@ const Strings = {
             }
         },
         'submit': {
+            'title': {
+                vi: 'Đăng nhập',
+                en: 'Login'
+            },
             'errors': {
                 'notValid': {
                     vi: 'Tên người dùng hoặc mật khẩu không hợp lệ',
@@ -249,6 +253,10 @@ const Strings = {
             }
         },
         'submit': {
+            'title': {
+                vi: 'Đăng ký',
+                en: 'Register'
+            },
             'errors': {
                 'failedToFetch': {
                     vi: 'Lỗi kết nối với máy chủ',
