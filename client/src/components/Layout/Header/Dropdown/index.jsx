@@ -13,7 +13,6 @@ import { BACKEND, Strings } from 'utils/Constants';
 
 import CustomScrollbar from 'components/CustomScrollbar';
 
-/* import './style.css'; */
 import './style.css';
 
 const DropdownItem = ({ onClick, data, setActiveMenu, goToMenu, leftIcon, rightIcon, header, children }) => {
@@ -52,18 +51,23 @@ const DropdownMenu = ({ user, logout, lang, setLang, setDropdownOpen }) => {
     }, [])
 
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true)
+        const handleScrollAndClickOutside = ({ target }) => {
+            if (dropdown.current && !dropdown.current.contains(target)) {
+                const avatar = document.querySelector('.avatarPicture');
+                if (avatar && avatar.contains(target)) return; // Ignore clicks on the avatar
+                setDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('click', handleScrollAndClickOutside, true);
+        document.addEventListener('scroll', handleScrollAndClickOutside, true);
+
         return () => {
-            document.removeEventListener('click', handleClickOutside, true)
-        }
-        // eslint-disable-next-line
-    }, [])
+            document.removeEventListener('click', handleScrollAndClickOutside, true);
+            document.removeEventListener('scroll', handleScrollAndClickOutside, true);
+        };
+    }, [setDropdownOpen]);
 
-    const handleClickOutside = ({ target }) => {
-        if (dropdown.current?.contains(target)) return
-
-        setDropdownOpen(false)
-    }
 
     const calcHeight = (el) => {
         const height = el.offsetHeight
