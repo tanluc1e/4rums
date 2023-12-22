@@ -99,6 +99,20 @@ const Strings = {
             }
         }
     },
+    'breadcrumbs': {
+        'home': {
+            vi: 'Trang chính',
+            en: 'Home'
+        },
+        'login': {
+            vi: 'Đăng nhập',
+            en: 'Login'
+        },
+        'register': {
+            vi: 'Đăng ký',
+            en: 'Register'
+        },
+    },
     'loginPage': {
         'title': {
             vi: 'Chào mừng bạn quay trở lại!',
@@ -113,7 +127,7 @@ const Strings = {
                 vi: 'Nhập tên người dùng...',
                 en: 'Type username...',
             },
-            errors: {
+            'errors': {
                 vi: 'Chưa nhập tên người dùng',
                 en: 'Enter your username'
             }
@@ -127,7 +141,7 @@ const Strings = {
                 vi: 'Nhập mật khẩu...',
                 en: 'Type password...',
             },
-            errors: {
+            'errors': {
                 vi: 'Chưa nhập mật khẩu',
                 en: 'Enter your password'
             }
@@ -143,13 +157,113 @@ const Strings = {
             }
         },
         'submit': {
-            errors: {
-                notValid: {
+            'errors': {
+                'notValid': {
                     vi: 'Tên người dùng hoặc mật khẩu không hợp lệ',
                     en: 'Username or password not valid'
+                },
+                'failedToFetch': {
+                    vi: 'Lỗi kết nối với máy chủ',
+                    en: 'Error connecting to server'
                 }
             },
-            success: {
+            'success': {
+                vi: 'Đăng nhập thành công',
+                en: 'Logged in successfully'
+            }
+        }
+    },
+    'registerPage': {
+        'title': {
+            vi: 'Chào mừng bạn quay trở lại!',
+            en: 'Welcome Back!'
+        },
+        'username': {
+            'label': {
+                vi: 'Tên người dùng',
+                en: 'Username',
+            },
+            'placeholder': {
+                vi: 'Nhập tên người dùng...',
+                en: 'Type username...',
+            },
+            'errors': {
+                vi: 'Chưa nhập tên người dùng',
+                en: 'Enter your username'
+            }
+        },
+        'email': {
+            'label': {
+                vi: 'Tên người dùng',
+                en: 'Email',
+            },
+            'placeholder': {
+                vi: 'Nhập tên người dùng...',
+                en: 'Type email...',
+            },
+            'errors': {
+                vi: 'Chưa nhập tên người dùng',
+                en: 'Enter your email'
+            }
+        },
+        'password': {
+            'label': {
+                vi: 'Mật khẩu',
+                en: 'Password',
+            },
+            'placeholder': {
+                vi: 'Nhập mật khẩu...',
+                en: 'Type password...',
+            },
+            'errors': {
+                vi: 'Chưa nhập mật khẩu',
+                en: 'Enter your password'
+            }
+        },
+        'confirmPassword': {
+            'label': {
+                vi: 'Nhập lại mật khẩu',
+                en: 'Repeat Password',
+            },
+            'placeholder': {
+                vi: 'Nhập lại mật khẩu...',
+                en: 'Type repeat password...',
+            },
+            'errors': {
+                vi: 'Chưa nhập lại mật khẩu',
+                en: 'Enter repeat password'
+            },
+            'notMatch': {
+                vi: 'Không trùng khớp',
+                en: 'Password not match'
+            }
+        },
+        'forgotPassword': {
+            'text': {
+                vi: 'Quên mật khẩu?',
+                en: 'Forgot your password?'
+            },
+            'click': {
+                vi: 'Nhấp tại đây',
+                en: 'Click here'
+            }
+        },
+        'submit': {
+            'errors': {
+                'failedToFetch': {
+                    vi: 'Lỗi kết nối với máy chủ',
+                    en: 'Error connecting to server'
+                },
+                'usernameRegistered': {
+                    vi: 'Tên người dùng đã được đăng ký',
+                    en: 'Username is already been registered'
+                },
+                'emailRegistered': {
+                    vi: 'Email đã được đăng ký',
+                    en: 'Email is already been registered'
+                }
+            },
+            'success': {
                 vi: 'Đăng nhập thành công',
                 en: 'Logged in successfully'
             }

@@ -2,7 +2,7 @@
     width: 100%;
     margin: auto;
     margin-top: 3rem;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     overflow: hidden;
 
     .registerContainer{
@@ -10,9 +10,9 @@
         width: 100%;
         margin: auto;
         justify-content: space-between;
-        border-radius: 10px;
+        border-radius: var(--border-radius);
         background: hsl(0, 0, 91%);
-
+        
         .formDiv{
             flex-basis: 50%;
             margin: auto;
@@ -42,7 +42,6 @@
                 .inputDiv{
                     .icon{
                         color: var(--secondary-text);
-
                     }
 
                     input{
@@ -50,26 +49,52 @@
                         outline: none;
                         border: none;
                         width: 300px;
-                    }
-
-                    label{
                         color: var(--main-text);
-                        font-weight: 400;
-                        font-size: 14px;
-                        padding: .5rem 0;
                     }
 
+                    .inputLabel{
+                        color: var(--main-text);
+                        font-weight: 500;
+                        padding: .3rem .0rem;
+                        user-select: none;
+                        margin: .3rem .2rem;
+                    }
+                    
                     .input{
                         gap: .5rem;
                         padding: 1rem;
                         background: var(--secondary-bg-tint);
+                    }
+
+                    .errorText{
+                        font-size: var(--smallFontSize);
+                        color: var(--main-danger-color);
+                        font-weight: 400;
+                        margin-left: .5rem;
+                    }
+
+                    .inputBorder{
+                        border: 2px solid transparent;
+                        border-radius: var(--border-radius);
+                        transition-duration: .2s;
+                        transition-property: border-color, background-color;
+                        overflow-wrap: anywhere;
+                        overflow: hidden;
+
+                        &:focus-within{
+                            border-color: var(--accent-color);
+                        }
+                    }
+                    
+                    .inputBorder.error{
+                        border-color: var(--main-danger-color);
                     }
                 }
 
                 .btn{
                     padding: .8rem;
                     background: var(--accent-color);
-                    border-radius: 10px;
+                    border-radius: var(--border-radius);
                     color: var(--main-text-light);
                     align-items: center;
                     margin: auto;
@@ -106,20 +131,33 @@
                     text-align: center;
 
                     a{
+                        color: var(--accent-color-tint);
                         text-decoration: underline;
                         cursor: pointer;
                     }
+                }
+
+                .message{
+                    display: none;
+                }
+                  
+                .showMessage{
+                    display: block;
+                    color: var(--secondary-text);
+                    padding: 10px;
+                    border-radius: var(--border-radius);
+                    background: var(--main-text);
+                    text-align: center;
                 }
             }
         }
     }
 }
 
-
 /* MEDIA QUERIES */
 @media screen and (max-width: 602px){
-    .registerPage{
-        .registerContainer{
+    .loginPage{
+        .loginContainer{
             height: 100%;
             width: 100%;
             flex-direction: column;

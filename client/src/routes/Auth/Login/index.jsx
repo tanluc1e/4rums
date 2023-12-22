@@ -6,14 +6,12 @@ import { useForm } from 'hooks/useForm';
 import Breadcrumbs from 'components/Breadcrumbs';
 import Input from 'components/Form/Input';
 import Alert from 'components/Alert';
+import { logo } from 'assets';
 import './style.css'
 
 // import icons
 import { FaUserShield } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
-import { GoChevronRight } from "react-icons/go";
-
-import img1 from 'assets/logo.png'
 
 export default function Login() {
     const { login, lang } = useContext(StoreContext)
@@ -38,11 +36,11 @@ export default function Login() {
 
         setErrors({});
 
-        if (!values.username) {
-            return setErrors({ username: 'Enter your name' });
+        if (!values.username.trim()) {
+            return setErrors({ username: Strings.loginPage.username.errors[lang] });
         }
-        if (!values.password) {
-            return setErrors({ password: 'Enter password' });
+        if (!values.password.trim()) {
+            return setErrors({ password: Strings.loginPage.password.errors[lang] });
         }
 
         setLoading(true);
@@ -72,6 +70,12 @@ export default function Login() {
         }
     };
 
+    if (errors.general === "Failed to fetch") {
+        setErrors({ msg: Strings.loginPage.submit.errors.failedToFetch[lang] })
+    } else if (errors.general === "Username or password not valid") {
+        setErrors({ msg: Strings.loginPage.submit.errors.notValid[lang] })
+    }
+
     useEffect(() => {
         if (success) {
             setTimeout(() => {
@@ -80,23 +84,30 @@ export default function Login() {
         }
     }, [success]);
 
+    console.log(errors)
+
     return (
         <>
-            <Breadcrumbs current="Đăng nhập" links={[
-                { title: 'Trang chính', link: '/' }
+            <Breadcrumbs current={Strings.breadcrumbs.login[lang]} links={[
+                { title: Strings.breadcrumbs.home[lang], link: '/' }
             ]} />
 
             <div className='loginPage flex'>
                 <div className='loginContainer flex'>
                     <div className="formDiv flex">
                         <div className="headerDiv">
-                            <img src={img1} alt="Logo" />
+                            <img src={logo} alt="Logo" />
                             <h3>{Strings.loginPage.title[lang]}</h3>
                         </div>
 
                         <form onSubmit={onSubmit} className='form grid'>
                             <div className="inputDiv">
-                                <div className="inputLabel">{Strings.loginPage.username.label[lang]} <span className='errorText'>{errors.username && Strings.loginPage.username.errors[lang]}</span></div>
+                                <div className="inputLabel">
+                                    {Strings.loginPage.username.label[lang]}
+                                    <span className='errorText'>
+                                        {errors.username}
+                                    </span>
+                                </div>
                                 <div className={`input flex ${errors.username ? 'inputBorder error' : 'inputBorder'}`}>
                                     <FaUserShield className='icon' />
                                     <Input type="text" name='username' id='username' placeholder={Strings.loginPage.username.placeholder[lang]} value={values.username} onChange={onChange} />
@@ -104,7 +115,12 @@ export default function Login() {
                             </div>
 
                             <div className="inputDiv">
-                                <div className="inputLabel">{Strings.loginPage.password.label[lang]} <span className='errorText'>{errors.password && Strings.loginPage.password.errors[lang]}</span></div>
+                                <div className="inputLabel">
+                                    {Strings.loginPage.password.label[lang]}
+                                    <span className='errorText'>
+                                        {errors.password}
+                                    </span>
+                                </div>
                                 <div className={`input flex ${errors.password ? 'inputBorder error' : 'inputBorder'}`}>
                                     <BsFillShieldLockFill className='icon' />
                                     <Input type="password" name='password' id='password' placeholder={Strings.loginPage.password.placeholder[lang]} value={values.password} onChange={onChange} />
@@ -113,7 +129,6 @@ export default function Login() {
 
                             <button type='submit' className='btn flex'>
                                 <span>Login</span>
-                                <GoChevronRight className='icon' />
                             </button>
 
                             <span className="forgotPassword">
@@ -122,7 +137,7 @@ export default function Login() {
                         </form>
 
                         {success && <Alert type="success" message={Strings.loginPage.submit.success[lang]} />}
-                        {errors.general === "Username or password not valid" && <Alert type="error" message={Strings.loginPage.submit.errors.notValid[lang]} />}
+                        {errors.msg && <Alert type="error" message={errors.msg} />}
                     </div>
                 </div>
             </div>
