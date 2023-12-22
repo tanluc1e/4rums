@@ -82,12 +82,29 @@
             gap: 1rem;
 
             .loginBtn{
-                padding: 1rem 1.5rem;
+                border: 2px solid var(--accent-color);
+                border-radius: var(--border-arounded);
+                color: var(--accent-color);
+                font-weight: 500;
+                transition: .5s;
+
+                &:hover{
+                    border-color: var(--accent-color-tint);
+                    color: var(--accent-color-tint);
+                }
+            }
+
+            .registerBtn{
                 background: var(--accent-color);
-                border-radius: var(--border-radius);
+                border: 2px solid var(--accent-color);
+                border-radius: var(--border-arounded);
                 color: #fff;
                 font-weight: 500;
                 transition: .5s;
+
+                &:hover{
+                    background: var(--accent-color-tint);
+                }
             }
         }
     }

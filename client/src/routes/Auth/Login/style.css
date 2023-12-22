@@ -12,7 +12,7 @@
         justify-content: space-between;
         border-radius: var(--border-radius);
         background: hsl(0, 0, 91%);
-
+        
         .formDiv{
             flex-basis: 50%;
             margin: auto;
@@ -85,8 +85,6 @@
                             border-color: var(--accent-color);
                         }
                     }
-    
-                    
                     
                     .inputBorder.error{
                         border-color: var(--main-danger-color);
@@ -133,6 +131,7 @@
                     text-align: center;
 
                     a{
+                        color: var(--accent-color-tint);
                         text-decoration: underline;
                         cursor: pointer;
                     }

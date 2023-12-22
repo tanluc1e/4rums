@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './style.css'
+import { Strings } from 'utils/Constants';
+import { StoreContext } from 'stores/Store';
 
 // import icons 
 import { GoHome, GoHomeFill } from "react-icons/go";
@@ -10,20 +12,21 @@ import { IoLayersOutline, IoLayers } from "react-icons/io5";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
 import { BsQuestionCircle } from "react-icons/bs";
 
-import logo from 'assets/fox.png'
+import logo from 'assets/logo.png'
 
 export default function Sidebar() {
+    const { lang } = useContext(StoreContext)
     const location = useLocation();
 
     const menuItems = [
-        { title: 'Trang Chính', path: '/', icon: GoHome, selectIcon: GoHomeFill },
-        { title: 'Bài Đăng', path: '/boards', icon: MdOutlineDashboard, selectIcon: MdDashboard },
-        { title: 'Tài Nguyên', path: '/files', icon: IoLayersOutline, selectIcon: IoLayers },
-        { title: 'Thành Viên', path: '/user', icon: RiGroupLine, selectIcon: RiGroupFill },
+        { title: Strings.sidebar.quickMenu.home[lang], path: '/', icon: GoHome, selectIcon: GoHomeFill },
+        { title: Strings.sidebar.quickMenu.boards[lang], path: '/boards', icon: MdOutlineDashboard, selectIcon: MdDashboard },
+        { title: Strings.sidebar.quickMenu.resources[lang], path: '/files', icon: IoLayersOutline, selectIcon: IoLayers },
+        { title: Strings.sidebar.quickMenu.members[lang], path: '/user', icon: RiGroupLine, selectIcon: RiGroupFill },
     ];
 
     const settingItems = [
-        { title: 'Tài Khoản', path: '/accounts', icon: FaRegUserCircle, selectIcon: FaUserCircle }
+        { title: Strings.sidebar.others.accounts[lang], path: '/accounts', icon: FaRegUserCircle, selectIcon: FaUserCircle }
     ];
     return (
         <div className='sideBar grid'>
@@ -34,7 +37,7 @@ export default function Sidebar() {
 
             <div className='menuDiv'>
                 <h3 className='divTitle'>
-                    THAO TÁC NHANH
+                    {Strings.sidebar.quickMenu[lang]}
                 </h3>
 
                 <ul className='menuLists grid'>
@@ -55,7 +58,7 @@ export default function Sidebar() {
 
             <div className='settingsDiv'>
                 <h3 className='divTitle'>
-                    CÀI ĐẶT
+                    {Strings.sidebar.others[lang]}
                 </h3>
 
                 <ul className='menuLists grid'>

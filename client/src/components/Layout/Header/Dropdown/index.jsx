@@ -4,8 +4,8 @@ import { CSSTransition } from 'react-transition-group';
 import { useTheme } from 'react-hook-theme';
 
 // import icons
-import { FaArrowLeftLong, FaChevronRight, FaCheck } from "react-icons/fa6";
-import { MdDarkMode, MdLightMode, MdAccountCircle, MdSettings, MdGTranslate, MdCheck } from "react-icons/md";
+import { FaCaretLeft, FaChevronRight, FaCheck } from "react-icons/fa6";
+import { MdDarkMode, MdLightMode, MdAccountCircle, MdSettings, MdGTranslate, MdLogout } from "react-icons/md";
 
 import { StoreContext } from 'stores/Store';
 
@@ -13,10 +13,10 @@ import { BACKEND, Strings } from 'utils/Constants';
 
 import CustomScrollbar from 'components/CustomScrollbar';
 
+/* import './style.css'; */
 import './style.css';
 
 const DropdownItem = ({ onClick, data, setActiveMenu, goToMenu, leftIcon, rightIcon, header, children }) => {
-    const dropHeader = header ? ' drop-header' : ''
 
     const click = () => {
         goToMenu && setActiveMenu(goToMenu)
@@ -24,15 +24,15 @@ const DropdownItem = ({ onClick, data, setActiveMenu, goToMenu, leftIcon, rightI
     }
 
     return (
-        <span className={'menu-item' + dropHeader} onClick={click}>
+        <span className={'menuItem'} onClick={click}>
             {leftIcon && (
-                <span className="icon-button">
+                <span className="leftIcon">
                     {leftIcon}
                 </span>
             )}
             {children}
             {rightIcon && (
-                <span className="icon-right">
+                <span className="rightIcon">
                     {rightIcon}
                 </span>
             )}
@@ -40,7 +40,7 @@ const DropdownItem = ({ onClick, data, setActiveMenu, goToMenu, leftIcon, rightI
     )
 }
 
-const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
+const DropdownMenu = ({ user, logout, lang, setLang, setDropdownOpen }) => {
     const navigate = useNavigate()
     const [activeMenu, setActiveMenu] = useState('main')
     const [menuHeight, setMenuHeight] = useState(null)
@@ -48,8 +48,22 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
     const dropdown = useRef()
 
     useEffect(() => {
-        setMenuHeight(dropdown.current?.querySelector('.menu').offsetHeight + 16)
+        setMenuHeight(dropdown.current?.querySelector('.dropdownMenu').offsetHeight + 16)
     }, [])
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside, true)
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true)
+        }
+        // eslint-disable-next-line
+    }, [])
+
+    const handleClickOutside = ({ target }) => {
+        if (dropdown.current?.contains(target)) return
+
+        setDropdownOpen(false)
+    }
 
     const calcHeight = (el) => {
         const height = el.offsetHeight
@@ -73,9 +87,14 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
         }
     }
 
+    const onLogout = () => {
+        setDropdownOpen(false)
+        logout()
+    }
+
     return (
-        <div className="head_dropdown" style={{ height: menuHeight }} ref={dropdown}>
-            <CustomScrollbar className="navigation__menu">
+        <div className="avatarDropdown" style={{ height: menuHeight }} ref={dropdown}>
+            <CustomScrollbar className="dropdownContainer">
 
                 <CSSTransition
                     in={activeMenu === 'main'}
@@ -84,26 +103,26 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
                     unmountOnExit
                     onEnter={calcHeight}
                 >
-                    <div className="menu">
+                    <div className="dropdownMenu">
                         <DropdownItem
                             leftIcon={<MdAccountCircle />}
                             onClick={goTo}
-                            data={{ url: '/user/' }}
+                            data={{ url: '/user/' + user.name }}
                         >
-                            <div className="menu-item-title">{Strings.dropdown.profiles[lang]}</div>
+                            <div className="itemTitle">{Strings.dropdown.profiles[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
                             leftIcon={<MdSettings />}
                             onClick={goTo}
-                            data={{ url: '/settings/' }}
+                            data={{ url: '/user/' + user.name + '/settings' }}
                         >
-                            <div className="menu-item-title">{Strings.dropdown.settings[lang]}</div>
+                            <div className="itemTitle">{Strings.dropdown.settings[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
                             leftIcon={theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
                             onClick={changeTheme}
                         >
-                            <div className="menu-item-title">{Strings.dropdown.changeThemes[lang]}</div>
+                            <div className="itemTitle">{Strings.dropdown.changeThemes[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
                             leftIcon={<MdGTranslate />}
@@ -111,7 +130,13 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
                             goToMenu="language"
                             setActiveMenu={setActiveMenu}
                         >
-                            <div className="menu-item-title">{Strings.dropdown.changeLanguages[lang]}</div>
+                            <div className="itemTitle">{Strings.dropdown.changeLanguages[lang]}</div>
+                        </DropdownItem>
+                        <DropdownItem
+                            leftIcon={<MdLogout />}
+                            onClick={onLogout}
+                        >
+                            <div className="itemTitle">{Strings.dropdown.logout[lang]}</div>
                         </DropdownItem>
                     </div>
                 </CSSTransition>
@@ -122,14 +147,14 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
                     classNames="menu-secondary"
                     unmountOnExit
                     onEnter={calcHeight}>
-                    <div className="menu">
+                    <div className="dropdownMenu">
                         <DropdownItem
                             goToMenu="main"
-                            leftIcon={<FaArrowLeftLong />}
+                            leftIcon={<FaCaretLeft />}
                             setActiveMenu={setActiveMenu}
                             header
                         >
-                            <div className="menu-item-title">{Strings.dropdown.changeLanguages[lang]}</div>
+                            <div className="itemTitle">{Strings.dropdown.changeLanguages[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
                             goToMenu="main"
@@ -138,7 +163,7 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
                             rightIcon={lang === 'vi' ? <FaCheck /> : ''}
                             setActiveMenu={setActiveMenu}
                         >
-                            <div className="menu-item-title">{Strings.dropdown.changeLanguages.choosed[lang]['vi']}</div>
+                            <div className="itemTitle">{Strings.dropdown.changeLanguages.choosed[lang]['vi']}</div>
                         </DropdownItem>
                         <DropdownItem
                             goToMenu="main"
@@ -147,7 +172,7 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
                             rightIcon={lang === 'en' ? <FaCheck /> : ''}
                             setActiveMenu={setActiveMenu}
                         >
-                            <div className="menu-item-title">{Strings.dropdown.changeLanguages.choosed[lang]['en']}</div>
+                            <div className="itemTitle">{Strings.dropdown.changeLanguages.choosed[lang]['en']}</div>
                         </DropdownItem>
                     </div>
                 </CSSTransition>
@@ -160,19 +185,21 @@ const DropdownMenu = ({ lang, setLang, setDropdownOpen }) => {
 export default function Dropdown() {
     const { user, logout, lang, setLang } = useContext(StoreContext)
     const [dropdownOpen, setDropdownOpen] = useState(false)
-    console.log("drop ", dropdownOpen)
+
     return (
-        <li className="head_act_item">
+        <li className="avatarSection">
             <div
-                className="head_profile"
-                style={{ backgroundImage: 'url(https://api.dicebear.com/7.x/lorelei-neutral/svg?seed=Pumpkin)' }}
+                className="avatarPicture"
+                style={user.picture && { backgroundImage: `url(${BACKEND + user.picture})` }}
                 onClick={() => setDropdownOpen(!dropdownOpen)}
             >
-                TanLuc
+                {!user.picture && user.displayName.charAt(0)}
             </div>
 
             {dropdownOpen && (
                 <DropdownMenu
+                    user={user}
+                    logout={logout}
                     lang={lang}
                     setLang={setLang}
                     setDropdownOpen={setDropdownOpen}
