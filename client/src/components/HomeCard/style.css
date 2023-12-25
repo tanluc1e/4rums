@@ -155,8 +155,8 @@
     }
 
     .cf-title-text {
-        margin-left: 1em;
-        color: var(--title-color);
+        color: var(--main-text);
+        font-size: var(--h3FontSize);
     }
 
     .cf-tags {
@@ -166,7 +166,7 @@
 
     .tags-count {
         padding: 0.5em 2em;
-        border: 2px solid hsl(228, 3.6%, 26.9%);
+        border: 2px solid var(--boxShadow-color);
         border-radius: var(--border-radius);
         margin-right: 1em;
         transition: .5s;
@@ -186,7 +186,7 @@
     }
 
     .tags-name {
-        color: var(--title-color);
+        color: var(--main-text);
     }
 
     .cf-topics {

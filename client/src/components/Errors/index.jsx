@@ -5,7 +5,7 @@ import './style.css'
 
 import { Strings } from 'utils/Constants';
 
-export default function Errorer({ message, size = 112, color = '#64707d' }) {
+export default function Errors({ message, size = 112, color = '#64707d' }) {
     const { lang } = useContext(StoreContext)
 
     return (
