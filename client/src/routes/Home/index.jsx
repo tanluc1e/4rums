@@ -1,14 +1,35 @@
-import React from 'react'
-import HomeCard from 'components/HomeCard'
-import Body from 'components/Layout/__test-Body__'
+import { useContext, useEffect, useState } from 'react';
 
-export default function Home() {
-    document.title = "4rums | Home"
+import { StoreContext } from 'stores/Store';
+
+import Boards from './Boards';
+import Activity from 'components/Layout/__test-Body__/Activity';
+import HomeCard from 'components/__test__/HomeCard';
+
+const Home = () => {
+    document.title = 'Forum'
+    const { setPostType, setFabVisible, lang } = useContext(StoreContext)
+    const [init, setInit] = useState(true)
+
+    useEffect(() => {
+        if (init) {
+            setFabVisible(true)
+            setPostType({
+                type: 'thread',
+                id: null
+            })
+        }
+        setInit(false)
+        // eslint-disable-next-line
+    }, [init])
+
     return (
         <>
-            <Body />
-            <HomeCard />
+            {navigator.onLine && <Boards lang={lang} />}
+            <Activity />
             <HomeCard />
         </>
     )
 }
+
+export default Home;

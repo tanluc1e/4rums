@@ -19,9 +19,12 @@ apiRouter.post('/profile/setOnline', verifyAccessToken, ProfileController.setOnl
 /* ----------- FORUM */
 apiRouter.get('/boards', ForumController.getBoards)
 apiRouter.get('/board', ForumController.getBoard)
+apiRouter.post('/board/create', verifyAccessToken, ForumController.createBoard)
+apiRouter.delete('/board/delete', verifyAccessToken, ForumController.deleteBoard)
+apiRouter.put('/board/edit', verifyAccessToken, ForumController.editBoard)
 
 apiRouter.get('/', (req, res) => {
-    res.json({ route: 'Auth router' })
+    res.json({ route: 'Api router' })
 })
 
 export default apiRouter;

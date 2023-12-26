@@ -2,8 +2,7 @@ import React from 'react'
 
 import './style.css'
 
-// import icons
-import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
+import { ArrowRight, Question } from "@phosphor-icons/react";
 
 import video from "assets/video.mp4"
 import img from "assets/1.png"
@@ -42,7 +41,7 @@ export default function CardStats() {
                         </div>
 
                         <div className='flex link'>
-                            Activity history <BsArrowRightShort className='icon' />
+                            Activity history <ArrowRight className='icon' />
                         </div>
                     </div>
 
@@ -52,7 +51,7 @@ export default function CardStats() {
                 </div>
 
                 <div className="sideBarCard">
-                    <BsQuestionCircle className='icon' />
+                    <Question className='icon' />
                     <div className="cardContent">
                         <div className="circle1"></div>
                         <div className="circle2"></div>

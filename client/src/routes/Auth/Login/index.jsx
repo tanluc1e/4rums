@@ -10,9 +10,7 @@ import Loader from 'components/Loader';
 import { logo } from 'assets';
 import './style.css'
 
-// import icons
-import { FaUserShield } from "react-icons/fa";
-import { BsFillShieldLockFill } from "react-icons/bs";
+import { User, LockKey } from "@phosphor-icons/react"
 
 export default function Login() {
     const { login, lang } = useContext(StoreContext)
@@ -85,8 +83,6 @@ export default function Login() {
         }
     }, [success]);
 
-    console.log(errors)
-
     return (
         <>
             <Breadcrumbs current={Strings.breadcrumbs.login[lang]} links={[
@@ -110,7 +106,7 @@ export default function Login() {
                                     </span>
                                 </div>
                                 <div className={`input flex ${errors.username ? 'inputBorder error' : 'inputBorder'}`}>
-                                    <FaUserShield className='icon' />
+                                    <User className='icon' />
                                     <Input type="text" name='username' id='username' placeholder={Strings.loginPage.username.placeholder[lang]} value={values.username} onChange={onChange} />
                                 </div>
                             </div>
@@ -123,7 +119,7 @@ export default function Login() {
                                     </span>
                                 </div>
                                 <div className={`input flex ${errors.password ? 'inputBorder error' : 'inputBorder'}`}>
-                                    <BsFillShieldLockFill className='icon' />
+                                    <LockKey className='icon' />
                                     <Input type="password" name='password' id='password' placeholder={Strings.loginPage.password.placeholder[lang]} value={values.password} onChange={onChange} />
                                 </div>
                             </div>

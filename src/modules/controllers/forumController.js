@@ -43,4 +43,85 @@ const getBoard = async (req, res, next) => {
     }
 }
 
-export { getBoards, getBoard };
+const createBoard = async (req, res, next) => {
+    try {
+        const { name, title, body, position } = req.body
+        const admin = req.payload.role === 3
+
+        if (!admin) return next(createHttpError.Unauthorized('Action not allowed'))
+        if (name.trim() === '') return next(createHttpError.BadRequest('Board name must not be empty'))
+        if (title.trim() === '') return next(createHttpError.BadRequest('Board title must not be empty'))
+        if (!position || !Number.isInteger(position) || position < 0) return next(createHttpError.BadRequest('Position must be number'))
+
+        const nameUrl = name.trim().toLowerCase().substring(0, 12).replace(/[^a-z0-9-_]/g, '')
+
+        const nameExist = await Board.findOne({ name: nameUrl })
+        if (nameExist) return next(createHttpError.Conflict('Board with this short name is already been created'))
+
+        const newBoard = new Board({
+            name: nameUrl,
+            title: title.trim().substring(0, 21),
+            body: body.substring(0, 100),
+            position,
+            createdAt: new Date().toISOString(),
+            threadsCount: 0,
+            answersCount: 0
+        })
+
+        const board = await newBoard.save()
+
+        res.json(board)
+    } catch (err) {
+        next(createHttpError.InternalServerError(err))
+    }
+}
+
+const deleteBoard = async (req, res, next) => {
+    try {
+        const { boardId } = req.body
+        const admin = req.payload.role === 3
+
+        if (!admin) return next(createHttpError.Unauthorized('Action not allowed'))
+        if (!boardId) return next(createHttpError.BadRequest('boardId must not be empty'))
+
+        const board = await Board.findById(boardId)
+        await board.delete()
+
+        res.json({ message: 'Board successfully deleted' })
+    } catch (err) {
+        next(createHttpError.InternalServerError(err))
+    }
+}
+
+const editBoard = async (req, res, next) => {
+    try {
+        const { boardId, name, title, body, position } = req.body
+        const admin = req.payload.role === 3
+
+        if (!admin) return next(createHttpError.Unauthorized('Action not allowed'))
+        if (!boardId) return next(createHttpError.BadRequest('boardId must not be empty'))
+        if (name.trim() === '') return next(createHttpError.BadRequest('Board name must not be empty'))
+        if (title.trim() === '') return next(createHttpError.BadRequest('Board title must not be empty'))
+        if (!position || !Number.isInteger(position) || position < 0) return next(createHttpError.BadRequest('Position must be number'))
+
+        const nameUrl = name.trim().toLowerCase().substring(0, 12).replace(/[^a-z0-9-_]/g, '')
+
+        const nameExist = await Board.findOne({ name: nameUrl })
+        if (nameExist) return next(createHttpError.Conflict('Board with this short name is already been created'))
+
+        await Board.updateOne({ _id: Types.ObjectId(boardId) }, {
+            name: nameUrl,
+            title: title.trim().substring(0, 21),
+            body: body.substring(0, 100),
+            position
+        })
+        const board = await Board.findById(boardId)
+
+        res.json(board)
+    } catch (err) {
+        next(createHttpError.InternalServerError(err))
+    }
+}
+
+
+export { getBoards, getBoard, createBoard, deleteBoard, editBoard };

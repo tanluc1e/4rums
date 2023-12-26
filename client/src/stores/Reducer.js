@@ -10,6 +10,21 @@ const Reducer = (state, action) => {
                 ...state,
                 token: action.payload
             }
+        case 'SET_USER_PICTURE':
+            return {
+                ...state,
+                user: { ...state.user, picture: action.payload }
+            }
+        case 'SET_POST_TYPE':
+            return {
+                ...state,
+                postType: action.payload
+            }
+        case 'SET_FAB_VISIBLE':
+            return {
+                ...state,
+                fab: action.payload
+            }
         case 'LOGIN':
             return {
                 ...state,

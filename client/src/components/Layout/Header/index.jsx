@@ -5,8 +5,7 @@ import './style.css'
 import Dropdown from './Dropdown';
 
 /* import icons */
-import { BiSearchAlt } from "react-icons/bi";
-import { TiUserAdd } from "react-icons/ti";
+import { MagnifyingGlass, UserPlus } from "@phosphor-icons/react";
 import { Link } from 'react-router-dom';
 
 export default function Header() {
@@ -24,7 +23,7 @@ export default function Header() {
 
                         <div className="searchBar flex">
                             <input type="text" placeholder={Strings.header.search[lang]} />
-                            <BiSearchAlt className='icon' />
+                            <MagnifyingGlass className='icon' />
                         </div>
 
                         <Dropdown />
@@ -45,7 +44,7 @@ export default function Header() {
                         <div className="buttonDiv flex">
                             <Link to={"/register"} className='registerBtn btn flex'>
                                 <span>Đăng ký</span>
-                                <TiUserAdd className='icon' />
+                                <UserPlus className='icon' weight='bold' />
                             </Link>
 
                             <Link to={"/login"} className='loginBtn btn flex'>

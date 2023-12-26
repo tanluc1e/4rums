@@ -2,7 +2,7 @@ import React from 'react'
 import './style.css'
 
 // import icons
-import { BsArrowRightShort } from "react-icons/bs";
+import { ArrowRight } from "@phosphor-icons/react";
 
 export default function Activity() {
     return (
@@ -10,7 +10,7 @@ export default function Activity() {
             <div className="heading flex">
                 <h1>Recent Activity</h1>
                 <button className='btn flex'>
-                    See All <BsArrowRightShort className='icon' />
+                    See All <ArrowRight className='icon' />
                 </button>
             </div>
 

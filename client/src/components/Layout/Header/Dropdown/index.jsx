@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useTheme } from 'react-hook-theme';
 
-// import icons
-import { FaCaretLeft, FaChevronRight, FaCheck } from "react-icons/fa6";
-import { MdDarkMode, MdLightMode, MdAccountCircle, MdSettings, MdGTranslate, MdLogout } from "react-icons/md";
+import { UserCircle, Gear, Sun, Moon, Translate, CaretRight, SignOut, CaretLeft, Check } from "@phosphor-icons/react"
 
 import { StoreContext } from 'stores/Store';
 
@@ -109,35 +107,35 @@ const DropdownMenu = ({ user, logout, lang, setLang, setDropdownOpen }) => {
                 >
                     <div className="dropdownMenu">
                         <DropdownItem
-                            leftIcon={<MdAccountCircle />}
+                            leftIcon={<UserCircle weight='fill' />}
                             onClick={goTo}
                             data={{ url: '/user/' + user.name }}
                         >
                             <div className="itemTitle">{Strings.dropdown.profiles[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
-                            leftIcon={<MdSettings />}
+                            leftIcon={<Gear weight='fill' />}
                             onClick={goTo}
                             data={{ url: '/user/' + user.name + '/settings' }}
                         >
                             <div className="itemTitle">{Strings.dropdown.settings[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
-                            leftIcon={theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
+                            leftIcon={theme === 'dark' ? <Moon weight='fill' /> : <Sun weight='fill' />}
                             onClick={changeTheme}
                         >
                             <div className="itemTitle">{Strings.dropdown.changeThemes[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
-                            leftIcon={<MdGTranslate />}
-                            rightIcon={<FaChevronRight />}
+                            leftIcon={<Translate weight='fill' />}
+                            rightIcon={<CaretRight weight='bold' />}
                             goToMenu="language"
                             setActiveMenu={setActiveMenu}
                         >
                             <div className="itemTitle">{Strings.dropdown.changeLanguages[lang]}</div>
                         </DropdownItem>
                         <DropdownItem
-                            leftIcon={<MdLogout />}
+                            leftIcon={<SignOut weight='bold' />}
                             onClick={onLogout}
                         >
                             <div className="itemTitle">{Strings.dropdown.logout[lang]}</div>
@@ -154,7 +152,7 @@ const DropdownMenu = ({ user, logout, lang, setLang, setDropdownOpen }) => {
                     <div className="dropdownMenu">
                         <DropdownItem
                             goToMenu="main"
-                            leftIcon={<FaCaretLeft />}
+                            leftIcon={<CaretLeft weight='bold' />}
                             setActiveMenu={setActiveMenu}
                             header
                         >
@@ -164,7 +162,7 @@ const DropdownMenu = ({ user, logout, lang, setLang, setDropdownOpen }) => {
                             goToMenu="main"
                             onClick={setLanguage}
                             data={{ lang: 'vi' }}
-                            rightIcon={lang === 'vi' ? <FaCheck /> : ''}
+                            rightIcon={lang === 'vi' ? <Check weight='bold' /> : ''}
                             setActiveMenu={setActiveMenu}
                         >
                             <div className="itemTitle">{Strings.dropdown.changeLanguages.choosed[lang]['vi']}</div>
@@ -173,7 +171,7 @@ const DropdownMenu = ({ user, logout, lang, setLang, setDropdownOpen }) => {
                             goToMenu="main"
                             onClick={setLanguage}
                             data={{ lang: 'en' }}
-                            rightIcon={lang === 'en' ? <FaCheck /> : ''}
+                            rightIcon={lang === 'en' ? <Check weight='bold' /> : ''}
                             setActiveMenu={setActiveMenu}
                         >
                             <div className="itemTitle">{Strings.dropdown.changeLanguages.choosed[lang]['en']}</div>

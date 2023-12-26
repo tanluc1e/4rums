@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './style.css';
 
 // import icons
-import { MdOutlineNavigateNext } from "react-icons/md";
+import { CaretRight } from "@phosphor-icons/react";
 
 export default function Breadcrumbs({ current, links }) {
     return (
@@ -12,7 +12,7 @@ export default function Breadcrumbs({ current, links }) {
                 {links.map((item, index) => (
                     <div key={index} className="breadcrumbsItem">
                         <Link className="breadcrumbsLink" to={item.link}>{item.title}</Link>
-                        <MdOutlineNavigateNext className='breadcrumbsIcon' />
+                        <CaretRight className='breadcrumbsIcon' />
                     </div>
                 ))}
                 <div className="breadcrumbs_item">{current}</div>

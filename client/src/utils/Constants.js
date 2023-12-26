@@ -198,15 +198,15 @@ const Strings = {
         },
         'email': {
             'label': {
-                vi: 'Tên người dùng',
+                vi: 'Email',
                 en: 'Email',
             },
             'placeholder': {
-                vi: 'Nhập tên người dùng...',
+                vi: 'Nhập email...',
                 en: 'Type email...',
             },
             'errors': {
-                vi: 'Chưa nhập tên người dùng',
+                vi: 'Chưa nhập email',
                 en: 'Enter your email'
             }
         },

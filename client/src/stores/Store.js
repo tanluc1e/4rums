@@ -25,6 +25,12 @@ document.querySelector('html').lang = lang
 const initialState = {
     user,
     token,
+    postType: {
+        type: 'thread',
+        id: null,
+        someData: null
+    },
+    fab: true,
     lang
 }
 
@@ -62,15 +68,40 @@ const Store = ({ children }) => {
         dispatch({ type: 'LOGOUT' })
     }
 
+    const setUserPicture = (payload) => {
+        localStorage.setItem('userPicture', payload)
+        dispatch({
+            type: 'SET_USER_PICTURE',
+            payload
+        })
+    }
 
+    const setPostType = (payload) => {
+        dispatch({
+            type: 'SET_POST_TYPE',
+            payload
+        })
+    }
+
+    const setFabVisible = (payload) => {
+        dispatch({
+            type: 'SET_FAB_VISIBLE',
+            payload
+        })
+    }
 
     const store = {
         lang: state.lang,
         setLang,
         token: state.token,
         user: state.user,
+        setUserPicture,
         modalOpen,
         setModalOpen,
+        postType: state.postType,
+        setPostType,
+        fab: state.fab,
+        setFabVisible,
         login,
         logout
     }

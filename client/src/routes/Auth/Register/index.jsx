@@ -10,9 +10,7 @@ import Loader from 'components/Loader';
 import { logo } from 'assets';
 import './style.css'
 
-// import icons
-import { FaUserShield } from "react-icons/fa";
-import { BsFillShieldLockFill } from "react-icons/bs";
+import { User, LockKey, EnvelopeSimple } from "@phosphor-icons/react"
 
 export default function Register() {
     const { login, lang } = useContext(StoreContext)
@@ -122,7 +120,7 @@ export default function Register() {
                                     </span>
                                 </div>
                                 <div className={`input flex ${errors.username ? 'inputBorder error' : 'inputBorder'}`}>
-                                    <FaUserShield className='icon' />
+                                    <User className='icon' />
                                     <Input type="text" name='username' id='username' placeholder={Strings.registerPage.username.placeholder[lang]} value={values.username} onChange={onChange} />
                                 </div>
                             </div>
@@ -135,7 +133,7 @@ export default function Register() {
                                     </span>
                                 </div>
                                 <div className={`input flex ${errors.email ? 'inputBorder error' : 'inputBorder'}`}>
-                                    <FaUserShield className='icon' />
+                                    <EnvelopeSimple className='icon' />
                                     <Input type="email" name='email' id='email' placeholder={Strings.registerPage.email.placeholder[lang]} value={values.email} onChange={onChange} />
                                 </div>
                             </div>
@@ -148,7 +146,7 @@ export default function Register() {
                                     </span>
                                 </div>
                                 <div className={`input flex ${errors.password ? 'inputBorder error' : 'inputBorder'}`}>
-                                    <BsFillShieldLockFill className='icon' />
+                                    <LockKey className='icon' />
                                     <Input type="password" name='password' id='password' placeholder={Strings.registerPage.password.placeholder[lang]} value={values.password} onChange={onChange} />
                                 </div>
                             </div>
@@ -161,7 +159,7 @@ export default function Register() {
                                     </span>
                                 </div>
                                 <div className={`input flex ${errors.confirmPassword ? 'inputBorder error' : 'inputBorder'}`}>
-                                    <BsFillShieldLockFill className='icon' />
+                                    <LockKey className='icon' />
                                     <Input type="password" name='confirmPassword' id='confirmPassword' placeholder={Strings.registerPage.confirmPassword.placeholder[lang]} value={values.confirmPassword} onChange={onChange} />
                                 </div>
                             </div>

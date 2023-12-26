@@ -1,6 +1,5 @@
 import React from 'react'
 import './style.css'
-import Tags from 'components/Tags'
 
 export default function HomeCard() {
     return (
@@ -24,7 +23,7 @@ export default function HomeCard() {
 
                     <div class="cf-title">
                         <i class='bx bxs-conversation'></i>
-                        <p class="cf-title-text">Community Forums <Tags type="approved" title="Check ok" /></p>
+                        <p class="cf-title-text">Community Forums</p>
                     </div>
 
                     <div class="cf-tags">

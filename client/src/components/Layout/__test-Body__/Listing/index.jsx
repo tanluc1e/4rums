@@ -2,8 +2,7 @@ import React from 'react'
 import './style.css'
 
 // import icons
-import { BsArrowRightShort } from "react-icons/bs";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { ArrowRight, Heart } from "@phosphor-icons/react";
 
 import img from 'assets/1.png'
 
@@ -13,31 +12,31 @@ export default function Listing() {
             <div className="heading flex">
                 <h1>My Listings</h1>
                 <button className='btn flex'>
-                    See All <BsArrowRightShort className='icon' />
+                    See All <ArrowRight className='icon' />
                 </button>
             </div>
 
             <div className="secContainer flex">
                 <div className="singleItem">
-                    <AiOutlineHeart className='icon' />
+                    <Heart className='icon' />
                     <img src={img} alt="" />
                     <h3>Item title 1</h3>
                 </div>
 
                 <div className="singleItem">
-                    <AiFillHeart className='icon' />
+                    <Heart weight='fill' className='icon' />
                     <img src={img} alt="" />
                     <h3>Item title 2</h3>
                 </div>
 
                 <div className="singleItem">
-                    <AiFillHeart className='icon' />
+                    <Heart className='icon' />
                     <img src={img} alt="" />
                     <h3>Item title 3</h3>
                 </div>
 
                 <div className="singleItem">
-                    <AiOutlineHeart className='icon' />
+                    <Heart weight='fill' className='icon' />
                     <img src={img} alt="" />
                     <h3>Item title 4</h3>
                 </div>

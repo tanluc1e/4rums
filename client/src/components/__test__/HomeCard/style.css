@@ -208,6 +208,12 @@
     }
 
     .cf-topic-threads {
+        color: var(--secondary-text);
+        margin-right: 1em;
+    }
+
+    .cf-topic-messages {
+        color: var(--secondary-text);
         margin-right: 1em;
     }
 
@@ -266,7 +272,7 @@
     }
 
     .cf-topic-name {
-        color: var(--title-color);
+        color: var(--main-text);
         font-weight: 400;
     }
 
@@ -281,6 +287,7 @@
     }
 
     .forum-type {
+        color: var(--secondary-text);
         font-weight: 400;
     }
 
