@@ -23,6 +23,16 @@ apiRouter.post('/board/create', verifyAccessToken, ForumController.createBoard)
 apiRouter.delete('/board/delete', verifyAccessToken, ForumController.deleteBoard)
 apiRouter.put('/board/edit', verifyAccessToken, ForumController.editBoard)
 
+apiRouter.get('/threads', ForumController.getThreads)
+apiRouter.get('/threads/recently', ForumController.getRecentlyThreads)
+apiRouter.get('/thread', ForumController.getThread)
+apiRouter.post('/thread/create', verifyAccessToken, ForumController.createThread)
+apiRouter.delete('/thread/delete', verifyAccessToken, ForumController.deleteThread)
+apiRouter.delete('/thread/clear', verifyAccessToken, ForumController.clearThread)
+apiRouter.put('/thread/edit', verifyAccessToken, ForumController.editThread)
+apiRouter.put('/thread/adminedit', verifyAccessToken, ForumController.adminEditThread)
+apiRouter.put('/thread/like', verifyAccessToken, ForumController.likeThread)
+
 apiRouter.get('/', (req, res) => {
     res.json({ route: 'Api router' })
 })
