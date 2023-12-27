@@ -12,16 +12,15 @@ export default function Layout({ children }) {
         <div className='container'>
             <Sidebar />
 
-            <div className='mainContent'>
+            <div className='content'>
                 <Header />
-                <div>
-                    {children}
-                    {/* <Rightbar /> */}
 
-                </div>
+                {children}
+                {/* <Rightbar /> */}
+
                 <ToastContainer position="bottom-right" hideProgressBar={true} autoClose={2000} closeOnClick />
+                <SpeedDial />
             </div>
-            <SpeedDial />
         </div>
     )
 }

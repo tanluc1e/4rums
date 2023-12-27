@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-
+import { ArrowRight } from "@phosphor-icons/react"
 import './style.css';
 
 export const Section = ({ children }) => {
     return (
-        <section className="main_section">
+        <section className="main-section">
             {children}
         </section>
     )
@@ -12,17 +12,15 @@ export const Section = ({ children }) => {
 
 export const SectionHeader = ({ title, link }) => {
     return link ? (
-        <div className="section_header with_link">
+        <div className="section-header with-link">
             <h2>{title}</h2>
-            <div className="more_link">
-                <Link to={link.url}>
-                    {link.title}
-                    <i className="bx bx-chevron-right" />
-                </Link>
-            </div>
+            <Link to={link.url} className='btn flex'>
+                {link.title}
+                <ArrowRight className='icon' />
+            </Link>
         </div>
     ) : (
-        <div className="section_header">
+        <div className="section-header">
             <h2>{title}</h2>
         </div>
     )

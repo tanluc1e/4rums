@@ -4,16 +4,14 @@ import { StoreContext } from 'stores/Store';
 import './style.css'
 import Dropdown from './Dropdown';
 
-/* import icons */
 import { MagnifyingGlass, UserPlus } from "@phosphor-icons/react";
 import { Link } from 'react-router-dom';
 
 export default function Header() {
     const { user, lang } = useContext(StoreContext)
-    console.log(user)
     return (
-        <div className='topSection'>
-            <div className='headerSection flex'>
+        <div className='header-container'>
+            <div className='header flex'>
                 {user ?
                     <>
                         <div className="title">
@@ -21,19 +19,12 @@ export default function Header() {
                             <p>{Strings.header.welcome.desc.loggedIn[lang].replace('%userdpname%', user.displayName)}</p>
                         </div>
 
-                        <div className="searchBar flex">
+                        <div className="search-bar flex">
                             <input type="text" placeholder={Strings.header.search[lang]} />
                             <MagnifyingGlass className='icon' />
                         </div>
 
                         <Dropdown />
-
-                        {/* <div className="avatarDiv flex">
-                            <RiNotification3Line className='icon' />
-                            <div className='avatarImage'>
-                                <img src="https://api.dicebear.com/7.x/notionists-neutral/svg?seed=Rascal" alt="Avatar" />
-                            </div>
-                        </div> */}
                     </> :
                     <>
                         <div className="title">
@@ -41,13 +32,13 @@ export default function Header() {
                             <p>{Strings.header.welcome.desc.notLogged[lang]}</p>
                         </div>
 
-                        <div className="buttonDiv flex">
-                            <Link to={"/register"} className='registerBtn btn flex'>
+                        <div className="button-container flex">
+                            <Link to={"/register"} className='button-login btn flex'>
                                 <span>Đăng ký</span>
                                 <UserPlus className='icon' weight='bold' />
                             </Link>
 
-                            <Link to={"/login"} className='loginBtn btn flex'>
+                            <Link to={"/login"} className='button-register btn flex'>
                                 <span>Đăng nhập</span>
                             </Link>
                         </div>

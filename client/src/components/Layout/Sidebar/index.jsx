@@ -23,21 +23,21 @@ export default function Sidebar() {
         { title: Strings.sidebar.others.accounts[lang], path: '/accounts', icon: UserCircle, selectIcon: UserCircle }
     ];
     return (
-        <div className='sideBar grid'>
-            <Link to={"/"} className='logoDiv flex'>
+        <div className='sidebar grid'>
+            <Link to={"/"} className='logo flex'>
                 <img src={logo} alt="Logo" />
                 <h2>4rums</h2>
             </Link>
 
-            <div className='menuDiv'>
-                <h3 className='divTitle'>
+            <div className='sidebar-menu'>
+                <h3 className='title'>
                     {Strings.sidebar.quickMenu[lang]}
                 </h3>
 
-                <ul className='menuLists grid'>
+                <ul className='menu-list grid'>
                     {menuItems.map((menu, index) => (
-                        <li className={`listItem ${location.pathname === menu.path && 'active'}`} key={index}>
-                            <Link to={menu.path} className='menuLink flex'>
+                        <li className={`list-item ${location.pathname === menu.path && 'active'}`} key={index}>
+                            <Link to={menu.path} className='list-item-link flex'>
                                 {location.pathname === menu.path ? <menu.selectIcon className='icon' weight='fill' /> : <menu.icon className='icon' weight='bold' />}
                                 <span className='smallText'>
                                     {menu.title}
@@ -50,15 +50,15 @@ export default function Sidebar() {
 
             <div className="sidebar-line"></div>
 
-            <div className='settingsDiv'>
-                <h3 className='divTitle'>
+            <div className='sidebar-settings'>
+                <h3 className='title'>
                     {Strings.sidebar.others[lang]}
                 </h3>
 
-                <ul className='menuLists grid'>
+                <ul className='menu-list grid'>
                     {settingItems.map((menu, index) => (
-                        <li className={`listItem ${location.pathname === menu.path && 'active'}`} key={index}>
-                            <Link to={menu.path} className='menuLink flex'>
+                        <li className={`list-item ${location.pathname === menu.path && 'active'}`} key={index}>
+                            <Link to={menu.path} className='list-item-link flex'>
                                 {location.pathname === menu.path ? <menu.selectIcon className='icon' weight='fill' /> : <menu.icon className='icon' weight='bold' />}
                                 <span className='smallText'>
                                     {menu.title}
@@ -69,9 +69,9 @@ export default function Sidebar() {
                 </ul>
             </div>
 
-            <div className="sideBarCard">
+            <div className="sidebar-card">
                 <Question className='icon' />
-                <div className="cardContent">
+                <div className="card-content">
                     <div className="circle1"></div>
                     <div className="circle2"></div>
 

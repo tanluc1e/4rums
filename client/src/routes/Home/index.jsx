@@ -26,7 +26,7 @@ const Home = () => {
     return (
         <>
             {navigator.onLine && <Boards lang={lang} />}
-            <Activity />
+            {/* <Activity /> */}
             <HomeCard />
         </>
     )
