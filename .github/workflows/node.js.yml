@@ -14,6 +14,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
     strategy:
       matrix:
         node-version: [18.x]
@@ -27,7 +30,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install
-    - name: Set up environment variables
-      run: |
-        echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
     - run: npm start
