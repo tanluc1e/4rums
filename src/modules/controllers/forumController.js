@@ -64,10 +64,10 @@ const createBoard = async (req, res, next) => {
         const { name, title, body, position } = req.body
         const admin = req.payload.role === 3
 
-        if (!admin) return next(createError.Unauthorized('Action not allowed'))
-        if (name.trim() === '') return next(createError.BadRequest('Board name must not be empty'))
-        if (title.trim() === '') return next(createError.BadRequest('Board title must not be empty'))
-        if (!position || !Number.isInteger(position) || position < 0) return next(createError.BadRequest('Position must be number'))
+        if (!admin) return next(createHttpError.Unauthorized('Action not allowed'))
+        if (name.trim() === '') return next(createHttpError.BadRequest('Board name must not be empty'))
+        if (title.trim() === '') return next(createHttpError.BadRequest('Board title must not be empty'))
+        if (!position || !Number.isInteger(position) || position < 0) return next(createHttpError.BadRequest('Position must be number'))
 
         const nameUrl = name.trim().toLowerCase().substring(0, 12).replace(/[^a-z0-9-_]/g, '')
 
@@ -246,9 +246,9 @@ const createThread = async (req, res, next) => {
             const postDataString = JSON.stringify(req.body);
             const { boardId, title, body } = JSON.parse(postDataString);
 
-            if (!boardId) return next(createError.BadRequest('boardId must not be empty'))
-            if (title.trim() === '') return next(createError.BadRequest('Thread title must not be empty'))
-            if (body.trim() === '') return next(createError.BadRequest('Thread body must not be empty'))
+            if (!boardId) return next(createHttpError.BadRequest('boardId must not be empty'))
+            if (title.trim() === '') return next(createHttpError.BadRequest('Thread title must not be empty'))
+            if (body.trim() === '') return next(createHttpError.BadRequest('Thread body must not be empty'))
 
             const now = new Date().toISOString()
 
@@ -652,8 +652,6 @@ const adminEditThread = async (req, res, next) => {
             const editedThread = await Thread.findById(threadId).populate(populate)
 
             res.json(editedThread)
-
-            req.io.to('thread:' + threadId).emit('threadEdited', editedThread)
         })
     } catch (err) {
         next(createHttpError.InternalServerError({ message: err.message }))
@@ -689,4 +687,326 @@ const likeThread = async (req, res, next) => {
         next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
-export { getBoards, getBoard, createBoard, deleteBoard, editBoard, getRecentlyThreads, getThreads, getThread, createThread, deleteThread, editThread, clearThread, likeThread, adminEditThread };
+
+
+/* ---------- ANSWERS */
+const getAnswers = async (req, res, next) => {
+    try {
+        const { threadId, limit = 10, page = 1, pagination = true } = req.query
+
+        if (!threadId) return next(createHttpError.BadRequest('threadId must not be empty'))
+
+        const populate = [{
+            path: 'author',
+            select: '_id name displayName onlineAt picture role ban'
+        }, {
+            path: 'likes',
+            select: '_id name displayName picture'
+        }]
+
+        let answers
+        try {
+            answers = await Answer.paginate({ threadId }, { page, limit, populate, pagination: JSON.parse(pagination) })
+        } catch (err) {
+            return next(createHttpError.BadRequest('threadId not found'))
+        }
+
+        res.json(answers)
+    } catch (err) {
+        next(createHttpError.InternalServerError({ message: err.message }))
+    }
+}
+
+const createAnswer = async (req, res, next) => {
+    try {
+        upload(req, res, async (err) => {
+            if (err) return next(createHttpError.BadRequest(err.message))
+
+            const postDataString = JSON.stringify(req.body);
+            const { threadId, answeredTo, body } = JSON.parse(postDataString);
+
+            if (!threadId) return next(createHttpError.BadRequest('threadId must not be empty'))
+            if (body.trim() === '') return next(createHttpError.BadRequest('Answer body must not be empty'))
+
+            const now = new Date().toISOString()
+
+            let thread
+            try {
+                thread = await Thread.findById(threadId)
+            } catch (err) {
+                return next(createHttpError.BadRequest('threadId not found'))
+            }
+
+            let files = null
+            if (req.files.length) {
+                files = []
+                await Promise.all(req.files.map(async (item) => {
+                    if (videoTypes.find(i => i === item.mimetype)) {
+                        const thumbFilename = item.filename.replace(path.extname(item.filename), '.jpg')
+
+                        await createThumb(item.path, 'forum', thumbFilename)
+
+                        files.push({
+                            file: `/forum/${item.filename}`,
+                            thumb: `/forum/thumbnails/${thumbFilename}`,
+                            type: item.mimetype,
+                            size: item.size
+                        })
+                    } else {
+                        files.push({
+                            file: `/forum/${item.filename}`,
+                            thumb: null,
+                            type: item.mimetype,
+                            size: item.size
+                        })
+                    }
+                }))
+            }
+
+            const newAnswer = new Answer({
+                boardId: thread.boardId,
+                threadId,
+                answeredTo,
+                body: body.substring(0, 1000),
+                createdAt: now,
+                author: req.payload.id,
+                attach: files
+            })
+
+            const answer = await newAnswer.save()
+
+            await Board.updateOne({ _id: new Types.ObjectId(thread.boardId) }, { $inc: { answersCount: 1 }, newestAnswer: now })
+            await Thread.updateOne({ _id: new Types.ObjectId(threadId) }, { $inc: { answersCount: 1 }, newestAnswer: now })
+
+            const populate = [{
+                path: 'author',
+                select: '_id name displayName onlineAt picture role ban'
+            }, {
+                path: 'likes',
+                select: '_id name displayName picture'
+            }]
+            const populatedAnswer = await Answer.findById(answer._id).populate(populate)
+
+            await User.updateOne({ _id: new Types.ObjectId(req.payload.id) }, {
+                $inc: {
+                    karma: populatedAnswer.author._id === req.payload.id ? 1 : 2
+                }
+            })
+
+            res.json(populatedAnswer)
+
+            let type = 'answerToThread'
+            let to = thread.author
+            if (answeredTo && answeredTo !== threadId) {
+                const answerTo = await Answer.findById(answeredTo)
+                type = 'answerToAnswer'
+                to = answerTo.author
+            }
+
+            if (!answeredTo && req.payload.id === thread.author.toString()) return
+
+            const newNotification = new Notification({
+                type,
+                to,
+                from: req.payload.id,
+                pageId: threadId,
+                title: thread.title,
+                body: body.substring(0, 1000),
+                createdAt: new Date().toISOString(),
+                read: false
+            })
+            const notification = await newNotification.save()
+
+            const populateNotification = [{
+                path: 'to',
+                select: '_id name displayName onlineAt picture role ban'
+            }, {
+                path: 'from',
+                select: '_id name displayName onlineAt picture role ban'
+            }]
+            const populatedNotification = await Notification.findById(notification._id).populate(populateNotification)
+        })
+    } catch (err) {
+        next(createHttpError.InternalServerError({ message: err.message }))
+    }
+}
+
+const deleteAnswer = async (req, res, next) => {
+    try {
+        const { answerId } = req.body
+        const moder = req.payload.role >= 2
+
+        if (!moder) return next(createHttpError.Unauthorized('Action not allowed'))
+        if (!answerId) return next(createHttpError.BadRequest('answerId must not be empty'))
+
+        let answer
+        try {
+            answer = await Answer.findById(answerId).populate({ path: 'author', select: 'role' })
+
+            if (!answer.author) {
+                answer.author = {
+                    role: 1
+                }
+            }
+        } catch (err) {
+            return next(createHttpError.BadRequest('answerId not found'))
+        }
+
+        if (req.payload.role < answer.author.role) return next(createHttpError.Unauthorized('Action not allowed'))
+
+        if (answer.attach && answer.attach.length) {
+            const files = answer.attach.reduce((array, item) => {
+                if (item.thumb) {
+                    return [
+                        ...array,
+                        path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file)),
+                        path.join(__dirname, '..', '..', '..', 'public', 'forum', 'thumbnails', path.basename(item.thumb))
+                    ]
+                }
+
+                return [
+                    ...array,
+                    path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file))
+                ]
+            }, [])
+
+            deleteFiles(files, (err) => {
+                if (err) console.error(err)
+            })
+        }
+
+        await answer.deleteOne()
+
+        await Board.updateOne({ _id: new Types.ObjectId(answer.boardId) }, { $inc: { answersCount: -1 } })
+        await Thread.updateOne({ _id: new Types.ObjectId(answer.threadId) }, { $inc: { answersCount: -1 } })
+
+        res.json({ message: 'Answer successfully deleted' })
+    } catch (err) {
+        next(createHttpError.InternalServerError({ message: err.message }))
+    }
+}
+
+const editAnswer = async (req, res, next) => {
+    try {
+        upload(req, res, async (err) => {
+            if (err) return next(createHttpError.BadRequest(err.message))
+
+            const postDataString = JSON.stringify(req.body);
+            const { answerId, body } = JSON.parse(postDataString);
+
+            if (!answerId) return next(createHttpError.BadRequest('answerId must not be empty'))
+            if (body.trim() === '') return next(createHttpError.BadRequest('Answer body must not be empty'))
+
+            const answer = await Answer.findById(answerId).populate({ path: 'author', select: 'role' })
+
+            if (!answer.author) {
+                answer.author = {
+                    role: 1
+                }
+            }
+            if (req.payload.id === answer.author._id || req.payload.role < answer.author.role) {
+                return next(createHttpError.Unauthorized('Action not allowed'))
+            }
+
+            if (req.files.length && answer.attach && answer.attach.length) {
+                const files = answer.attach.reduce((array, item) => {
+                    if (item.thumb) {
+                        return [
+                            ...array,
+                            path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file)),
+                            path.join(__dirname, '..', '..', '..', 'public', 'forum', 'thumbnails', path.basename(item.thumb))
+                        ]
+                    }
+
+                    return [
+                        ...array,
+                        path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file))
+                    ]
+                }, [])
+
+                deleteFiles(files, (err) => {
+                    if (err) console.error(err)
+                })
+            }
+
+            let files = answer.attach
+            if (req.files.length) {
+                files = []
+                await Promise.all(req.files.map(async (item) => {
+                    if (videoTypes.find(i => i === item.mimetype)) {
+                        const thumbFilename = item.filename.replace(path.extname(item.filename), '.jpg')
+
+                        await createThumb(item.path, 'forum', thumbFilename)
+
+                        files.push({
+                            file: `/forum/${item.filename}`,
+                            thumb: `/forum/thumbnails/${thumbFilename}`,
+                            type: item.mimetype,
+                            size: item.size
+                        })
+                    } else {
+                        files.push({
+                            file: `/forum/${item.filename}`,
+                            thumb: null,
+                            type: item.mimetype,
+                            size: item.size
+                        })
+                    }
+                }))
+            }
+
+            await Answer.updateOne({ _id: new Types.ObjectId(answerId) }, {
+                body: body.substring(0, 1000),
+                edited: {
+                    createdAt: new Date().toISOString()
+                },
+                attach: files
+            })
+
+            const populate = [{
+                path: 'author',
+                select: '_id name displayName onlineAt picture role ban'
+            }, {
+                path: 'likes',
+                select: '_id name displayName picture'
+            }]
+            const editedAnswer = await Answer.findById(answerId).populate(populate)
+
+            res.json(editedAnswer)
+        })
+    } catch (err) {
+        next(createHttpError.InternalServerError({ message: err.message }))
+    }
+}
+
+const likeAnswer = async (req, res, next) => {
+    try {
+        const { answerId } = req.body
+
+        if (!answerId) return next(createHttpError.BadRequest('answerId must not be empty'))
+
+        const answer = await Answer.findById(answerId)
+
+        if (answer.likes.find(like => like.toString() === req.payload.id)) {
+            answer.likes = answer.likes.filter(like => like.toString() !== req.payload.id) // unlike
+        } else {
+            answer.likes.push(req.payload.id) // like
+        }
+        await answer.save()
+
+        const populate = [{
+            path: 'author',
+            select: '_id name displayName onlineAt picture role ban'
+        }, {
+            path: 'likes',
+            select: '_id name displayName picture'
+        }]
+        const likedAnswer = await Answer.findById(answerId).populate(populate)
+
+        res.json(likedAnswer)
+    } catch (err) {
+        next(createHttpError.InternalServerError({ message: err.message }))
+    }
+}
+
+export { getBoards, getBoard, createBoard, deleteBoard, editBoard, getRecentlyThreads, getThreads, getThread, createThread, deleteThread, editThread, clearThread, likeThread, adminEditThread, getAnswers, createAnswer, deleteAnswer, editAnswer, likeAnswer };

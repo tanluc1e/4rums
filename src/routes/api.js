@@ -33,6 +33,12 @@ apiRouter.put('/thread/edit', verifyAccessToken, ForumController.editThread)
 apiRouter.put('/thread/adminedit', verifyAccessToken, ForumController.adminEditThread)
 apiRouter.put('/thread/like', verifyAccessToken, ForumController.likeThread)
 
+apiRouter.get('/answers', ForumController.getAnswers)
+apiRouter.post('/answer/create', verifyAccessToken, ForumController.createAnswer)
+apiRouter.delete('/answer/delete', verifyAccessToken, ForumController.deleteAnswer)
+apiRouter.put('/answer/edit', verifyAccessToken, ForumController.editAnswer)
+apiRouter.put('/answer/like', verifyAccessToken, ForumController.likeAnswer)
+
 apiRouter.get('/', (req, res) => {
     res.json({ route: 'Api router' })
 })
