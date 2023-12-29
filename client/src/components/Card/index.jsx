@@ -2,6 +2,10 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
+import { ChatText, PushPinSimple, Lock, DotsThreeVertical } from '@phosphor-icons/react'
+
+import './style.css'
+
 const Card = ({ data, full }) => {
     const imageTypes = ['jpg', 'jpeg', 'png', 'gif']
     const imageFile = data?.attach?.length
@@ -10,7 +14,7 @@ const Card = ({ data, full }) => {
 
     return (
         <div className="card_item">
-            {full && <a id={data.id} href={'#' + data.id} className="anchor"> </a>}
+            {full && <a id={data._id} href={'#' + data._id} className="anchor"> </a>}
 
             <div className="card_body">
                 <div className="card_block">
@@ -18,20 +22,20 @@ const Card = ({ data, full }) => {
                         <div className="card_head_inner">
                             {full ? (
                                 <div className="card_title full">
-                                    {data.pined && <i className="thread_pin bx bx-pin"></i>}
-                                    {data.closed && <i className="thread_lock bx bx-lock-alt"></i>}
+                                    {data.pined && <PushPinSimple weight='bold' className="thread_pin" />}
+                                    {data.closed && <Lock weight='bold' className='thread_lock' />}
                                     {data.title}
                                 </div>
                             ) : (
-                                <Link to={'/thread/' + data.id} className="card_title">
-                                    {data.pined && <i className="thread_pin bx bx-pin"></i>}
-                                    {data.closed && <i className="thread_lock bx bx-lock-alt"></i>}
+                                <Link to={'/thread/' + data._id} className="card_title">
+                                    {data.pined && <PushPinSimple weight='bold' className="thread_pin" />}
+                                    {data.closed && <Lock weight='bold' className='thread_lock' />}
                                     {data.title}
                                 </Link>
                             )}
 
                             <div className="card_info">
-                                <Link to={'/user/' + data.author[0].id} className="head_text bold">{data.author[0].username}</Link>
+                                <Link to={'/user/' + data.author._id} className="head_text bold">{data.author.name}</Link>
                                 <span className="bullet">•</span>
                                 <span className="head_text">
                                     <time>{moment(data.createdAt).fromNow()}</time>
@@ -41,7 +45,7 @@ const Card = ({ data, full }) => {
 
                         <div className="dropdown">
                             <div className="dropdown_trigger act_btn">
-                                <i className="bx bx-dots-horizontal-rounded"></i>
+                                <DotsThreeVertical weight='bold' />
                             </div>
                             <div className="dropdown_content">
                                 <div className="dropdown_item">Report</div>
@@ -81,7 +85,7 @@ const Card = ({ data, full }) => {
 
                                 {data.answersCount > 0 && (
                                     <div className="act_btn foot_btn disable">
-                                        <i className="bx bx-message-square-detail"></i>
+                                        <ChatText weight='bold' />
                                         <span className="card_count">{data.answersCount}</span>
                                         <span className="hidden">answers</span>
                                     </div>
@@ -96,7 +100,7 @@ const Card = ({ data, full }) => {
                             </footer>
                         ) : (
                             <div className="act_btn foot_btn disable">
-                                <i className="bx bx-message-square-detail"></i>
+                                <ChatText weight='bold' />
                                 <span className="card_count">{data.answersCount || 0}</span>
                                 <span className="hidden">answers</span>
                             </div>
@@ -115,7 +119,7 @@ const BoardCard = ({ data }) => {
                 <div className="card_block">
                     <header className="card_head">
                         <div className="card_head_inner">
-                            <Link to={'/boards/' + data.id} className="card_title">{data.title}</Link>
+                            <Link to={'/boards/' + data._id} className="card_title">{data.title}</Link>
                         </div>
                     </header>
 
@@ -127,7 +131,7 @@ const BoardCard = ({ data }) => {
                         </div>
 
                         <div className="act_btn foot_btn disable">
-                            <i className="bx bx-message-square-detail"></i>
+                            <ChatText weight='bold' />
                             <span className="card_count">{data.messagesCount}</span>
                             <span className="hidden">messages</span>
                         </div>

@@ -1,6 +1,6 @@
 .sidebar{
     box-shadow: 2px 0 0px var(--boxShadow-color);
-    width: 17%;
+    width: 16%;
     height: 100%;
     gap: 3rem;
     overflow: auto;
@@ -10,7 +10,7 @@
         cursor: default;
 
         img{
-            max-width: 20px;
+            max-width: 30px;
             margin-right: .5rem;
             background: var(--secondary-bg-tint);
             border-radius: var(--border-radius);
@@ -51,7 +51,7 @@
                 }
 
                 .list-item-link{
-                    color: var(--main-text);
+                    color: var(--secondary-text);
                     font-weight: 500;
                     transition: 0;
 
@@ -164,6 +164,19 @@
 }
 
 /* MEDIA QUERIES */
+@media screen and (max-width: 960px){
+    .sidebar{
+        .list-item-link{
+            display: block !important;
+            text-align: center;
+    
+            .icon{
+                width: 100%;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 820px){
     .sidebar{
         padding-bottom: 2rem;

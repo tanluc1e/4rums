@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 
 import { StoreContext } from 'stores/Store';
+import { PencilSimple } from '@phosphor-icons/react'
 
-import Boards from './Boards';
-import Activity from 'components/Layout/__test-Body__/Activity';
 import HomeCard from 'components/__test__/HomeCard';
+import SpeedDial from 'components/SpeedDial';
 
 const Home = () => {
     document.title = 'Forum'
@@ -25,9 +25,11 @@ const Home = () => {
 
     return (
         <>
-            {navigator.onLine && <Boards lang={lang} />}
+            {/* {navigator.onLine && <Boards lang={lang} />} */}
             {/* <Activity /> */}
+            {/* <CardStats /> */}
             <HomeCard />
+            <SpeedDial icon={<PencilSimple />} />
         </>
     )
 }

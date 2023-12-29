@@ -7,7 +7,7 @@ import { ArrowRight, Question } from "@phosphor-icons/react";
 /* import video from "assets/video.mp4" */
 import img from "assets/1.png"
 
-export default function CardStats() {
+export default function CardStatsCopy() {
     return (
         <div className="cardSection flex">
             <div className="rightCard flex">

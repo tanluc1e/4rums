@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
 import './style.css'; // Import your SpeedDial styling
 
-const SpeedDial = () => {
+const SpeedDial = ({ icon: IconComponent, canClick }) => {
     const [isActive, setIsActive] = useState(false);
 
     const toggleSpeedDial = () => {
-        setIsActive(!isActive);
+        if (canClick === true) setIsActive(!isActive);
+        return
     };
 
     return (
         <>
             <div className={`speed-dial ${isActive ? 'speed-dial--active' : ''}`}>
-                <button class="speed-dial__button speed-dial__button--primary" onClick={toggleSpeedDial}>
-                    <svg style={{ width: "24px", height: "24px" }} viewBox="0 0 24 24">
-                        <path
-                            fill="currentColor"
-                            d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"
-                        />
-                    </svg>
+                <button className="speed-dial__button speed-dial__button--primary" onClick={toggleSpeedDial}>
+                    {IconComponent}
                 </button>
-                <div class="speed-dial__options">
-                    <button class="speed-dial__button">
+                <div className="speed-dial__options">
+                    <button className="speed-dial__button">
                         <svg style={{ width: "24px", height: "24px" }} viewBox="0 0 24 24">
                             <path
                                 fill="currentColor"
@@ -28,7 +24,7 @@ const SpeedDial = () => {
                             />
                         </svg>
                     </button>
-                    <a href="#!" class="speed-dial__button">
+                    <a href="#!" className="speed-dial__button">
                         <svg style={{ width: "24px", height: "24px" }} viewBox="0 0 24 24">
                             <path
                                 fill="currentColor"
@@ -36,7 +32,7 @@ const SpeedDial = () => {
                             />
                         </svg>
                     </a>
-                    <span class="speed-dial__button">
+                    <span className="speed-dial__button">
                         <svg style={{ width: "24px", height: "24px" }} viewBox="0 0 24 24">
                             <path
                                 fill="currentColor"
@@ -45,7 +41,7 @@ const SpeedDial = () => {
                         </svg>
                     </span>
                 </div>
-            </div></>
+            </div ></>
     );
 };
 

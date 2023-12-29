@@ -2,12 +2,20 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 2rem;
 
+    .post{
+        width: 70%;
+    }    
+    .right {
+        margin-top: 2em;
+        width: 30%;
+    }
     .welcome-container {
         padding: 3em;
         background: var(--secondary-bg);
         border-radius: var(--border-radius);
-        width: 95%;
+        width: 100%;
         margin-top: 2em;
 
         .welcome-flex {
@@ -22,7 +30,7 @@
         }
     
         .welcome-title {
-            font-size: 3em;
+            font-size: 3rem;
             font-weight: 700;
             color: var(--main-text);
         }
@@ -53,16 +61,6 @@
         }    
     }
 
-    /* <------------- right block ----------> */
-
-    .right {
-        margin-top: 2em;
-        max-width: 310px
-
-        
-    }
-
-
     /* <------------- staff ----------> */
 
     .title {
@@ -91,11 +89,13 @@
         margin-bottom: 1em;
     }
 
-    .icon {
-        padding: 1em;
-        background: var(--secondary-bg);
-        border-radius: var(--border-radius);
-        margin-right: 1em;
+    .member-icon, .threads-icon{
+        .icon {
+            padding: 1em;
+            background: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            margin-right: 1em;
+        }
     }
 
     .staff-name {
@@ -235,42 +235,7 @@
         margin-right: 1em;
         background: #70b01f;
     }
-
-    .cf-topics-icon-3 {
-        padding: 1em 1.5em;
-        border-radius: var(--border-radius);
-        margin-right: 1em;
-        background: #7a5dec;
-    }
-
-    .cf-topics-icon-4 {
-        padding: 1em 1.5em;
-        border-radius: var(--border-radius);
-        margin-right: 1em;
-        background: #ef742d;
-    }
-
-    .cf-topics-icon-5 {
-        padding: 1em 1.5em;
-        border-radius: var(--border-radius);
-        margin-right: 1em;
-        background: #70b01f;
-    }
-
-    .cf-topics-icon-6 {
-        padding: 1em 1.5em;
-        border-radius: var(--border-radius);
-        margin-right: 1em;
-        background: #0084ff;
-    }
-
-    .cf-topics-icon-7 {
-        padding: 1em 1.5em;
-        border-radius: var(--border-radius);
-        margin-right: 1em;
-        background: #7a5dec;
-    }
-
+    
     .cf-topic-name {
         color: var(--main-text);
         font-weight: 400;
@@ -293,5 +258,55 @@
 
     .fa-solid {
         color: #fff;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .post{
+        width: 100% !important;
+
+        .welcome-container {
+            padding: 1.2rem;
+        }
+        .welcome-title {
+            font-size: var(--h1FontSize) !important;
+            font-weight: 700;
+            color: var(--main-text);
+        }
+    }
+    .calendar{
+        display: none;
+    }
+    .right{
+        max-width: none !important;
+        width: 100% !important;
+    }
+    .merge{
+        display: block;
+    }
+    .welcome-flex {
+        flex-direction: column;
+    }
+
+    .calendar {
+        width: 80%;
+        max-width: 250px;
+    }
+
+    .welcome-title {
+        font-size: 2em;
+    }
+}
+
+
+@media screen and (max-width: 650px) {
+    .cf-topics-count{
+        display: grid !important;
+        grid-gap: 1rem;
+
+        .cf-topic-reactions{
+            text-align: center;
+            justify-content: center;
+        }
     }
 }

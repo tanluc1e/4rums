@@ -1,13 +1,14 @@
 .main-section{
     margin: 1rem 0 0;
+    width: 95%;
 
-    &:not(:first-child){
+    /* &:not(:first-child){
         margin: 2rem 1rem 0;
     }
 
     &:last-child{
         margin-bottom: 6rem;
-    }
+    } */
 
     .section-header{
         margin-bottom: 1.1rem;

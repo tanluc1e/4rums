@@ -10,13 +10,12 @@
   text-align: center;
 }
 .speed-dial__button {
+  width: 60px;
+  height: 60px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 12px;
-  margin-bottom: 15px;
-  background: var(--secondary-bg);
-  color: var(--secondary-text);
   border-radius: 50%;
   border: none;
   outline: none;
@@ -25,6 +24,7 @@
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.2s, opacity 0.2s, transform 0.2s;
+  font-size: 2.3rem;
 }
 .speed-dial__button:active {
   background: #aaa;

@@ -1,5 +1,19 @@
 import createHttpError from 'http-errors';
+import { fileURLToPath } from 'url'
+import path from 'path'
 import Board from '../models/Board.js';
+import { upload } from '../utils/storage.js';
+import { videoTypes } from '../utils/checkFileExec.js';
+import deleteFiles from '../utils/deleteFiles.js';
+import { Types } from 'mongoose';
+
+import Thread from '../models/Thread.js';
+import User from '../models/User.js';
+import Answer from '../models/Answer.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 
 /* ---------- BOARDS */
@@ -22,7 +36,7 @@ const getBoards = async (req, res, next) => {
 
         res.json(boards)
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -41,7 +55,7 @@ const getBoard = async (req, res, next) => {
 
         res.json(board)
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -50,10 +64,10 @@ const createBoard = async (req, res, next) => {
         const { name, title, body, position } = req.body
         const admin = req.payload.role === 3
 
-        if (!admin) return next(createHttpError.Unauthorized('Action not allowed'))
-        if (name.trim() === '') return next(createHttpError.BadRequest('Board name must not be empty'))
-        if (title.trim() === '') return next(createHttpError.BadRequest('Board title must not be empty'))
-        if (!position || !Number.isInteger(position) || position < 0) return next(createHttpError.BadRequest('Position must be number'))
+        if (!admin) return next(createError.Unauthorized('Action not allowed'))
+        if (name.trim() === '') return next(createError.BadRequest('Board name must not be empty'))
+        if (title.trim() === '') return next(createError.BadRequest('Board title must not be empty'))
+        if (!position || !Number.isInteger(position) || position < 0) return next(createError.BadRequest('Position must be number'))
 
         const nameUrl = name.trim().toLowerCase().substring(0, 12).replace(/[^a-z0-9-_]/g, '')
 
@@ -72,9 +86,9 @@ const createBoard = async (req, res, next) => {
 
         const board = await newBoard.save()
 
-        res.json(board)
+        res.json({ message: "Board created sucessfully", newBoard: board })
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -86,12 +100,18 @@ const deleteBoard = async (req, res, next) => {
         if (!admin) return next(createHttpError.Unauthorized('Action not allowed'))
         if (!boardId) return next(createHttpError.BadRequest('boardId must not be empty'))
 
-        const board = await Board.findById(boardId)
-        await board.delete()
+        let board;
+        try {
+            board = await Board.findById(boardId)
+            await board.deleteOne()
 
-        res.json({ message: 'Board successfully deleted' })
+            res.json({ message: 'Board successfully deleted' })
+        } catch (err) {
+            return next(createHttpError.BadRequest({ message: "boardId not found" }))
+        }
+
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -111,17 +131,26 @@ const editBoard = async (req, res, next) => {
         const nameExist = await Board.findOne({ name: nameUrl })
         if (nameExist) return next(createHttpError.Conflict('Board with this short name is already been created'))
 
-        await Board.updateOne({ _id: Types.ObjectId(boardId) }, {
-            name: nameUrl,
-            title: title.trim().substring(0, 21),
-            body: body.substring(0, 100),
-            position
-        })
-        const board = await Board.findById(boardId)
+        let board
+        try {
+            await Board.updateOne({ _id: new Types.ObjectId(boardId) }, {
+                name: nameUrl,
+                title: title.trim().substring(0, 21),
+                body: body.substring(0, 100),
+                position
+            })
 
-        res.json(board)
+            board = await Board.findById(boardId)
+            if (board != null) {
+                res.json({ message: "Updated sucessfully", newBoard: board })
+            } else {
+                return next(createHttpError.BadRequest({ message: "boardId not found" }))
+            }
+        } catch (err) {
+            return next(createHttpError.BadRequest({ message: err.message }))
+        }
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -142,7 +171,7 @@ const getRecentlyThreads = async (req, res, next) => {
 
         res.json(threads)
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -159,7 +188,14 @@ const getThreads = async (req, res, next) => {
             path: 'likes',
             select: '_id name displayName picture'
         }]
+
         let threads
+        try {
+            threads = await Thread.paginate({ boardId })
+        } catch (err) {
+            return next(createHttpError.BadRequest('boardId not found'))
+        }
+
         if (sort === 'answersCount') {
             threads = await Thread.paginate({ boardId }, { sort: { pined: -1, answersCount: -1 }, page, limit, populate })
         } else if (sort === 'newestAnswer') {
@@ -170,7 +206,7 @@ const getThreads = async (req, res, next) => {
 
         res.json(threads)
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -187,25 +223,32 @@ const getThread = async (req, res, next) => {
             path: 'likes',
             select: '_id name displayName picture'
         }]
-        const thread = await Thread.findById(threadId).populate(populate)
-        const board = await Board.findById(thread.boardId).select('_id name title')
+
+        let thread, board;
+        try {
+            thread = await Thread.findById(threadId).populate(populate)
+            board = await Board.findById(thread.boardId).select('_id name title')
+        } catch (err) {
+            return next(createHttpError.BadRequest('threadId not found'))
+        }
 
         res.json({ board, thread })
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
 const createThread = async (req, res, next) => {
     try {
         upload(req, res, async (err) => {
-            if (err) return next(createHttpError.BadRequest(err.message))
+            if (err) return next(createHttpError.BadRequest({ upload: err.message }))
 
-            const { boardId, title, body } = JSON.parse(req.body.postData)
+            const postDataString = JSON.stringify(req.body);
+            const { boardId, title, body } = JSON.parse(postDataString);
 
-            if (!boardId) return next(createHttpError.BadRequest('boardId must not be empty'))
-            if (title.trim() === '') return next(createHttpError.BadRequest('Thread title must not be empty'))
-            if (body.trim() === '') return next(createHttpError.BadRequest('Thread body must not be empty'))
+            if (!boardId) return next(createError.BadRequest('boardId must not be empty'))
+            if (title.trim() === '') return next(createError.BadRequest('Thread title must not be empty'))
+            if (body.trim() === '') return next(createError.BadRequest('Thread body must not be empty'))
 
             const now = new Date().toISOString()
 
@@ -249,13 +292,13 @@ const createThread = async (req, res, next) => {
 
             const thread = await newThread.save()
 
-            await Board.updateOne({ _id: Types.ObjectId(boardId) }, { $inc: { threadsCount: 1 }, newestThread: now })
-            await User.updateOne({ _id: Types.ObjectId(req.payload.id) }, { $inc: { karma: 5 } })
+            await Board.updateOne({ _id: new Types.ObjectId(boardId) }, { $inc: { threadsCount: 1 }, newestThread: now })
+            await User.updateOne({ _id: new Types.ObjectId(req.payload.id) }, { $inc: { karma: 5 } })
 
             res.json(thread)
         })
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -263,11 +306,16 @@ const deleteThread = async (req, res, next) => {
     try {
         const { threadId } = req.body
         const moder = req.payload.role >= 2
+        let thread;
 
         if (!moder) return next(createHttpError.Unauthorized('Action not allowed'))
         if (!threadId) return next(createHttpError.BadRequest('threadId must not be empty'))
 
-        const thread = await Thread.findById(threadId).populate({ path: 'author', select: 'role' })
+        try {
+            thread = await Thread.findById(threadId).populate({ path: 'author', select: 'role' })
+        } catch (error) {
+            return next(createHttpError.BadRequest({ message: "threadId not found" }))
+        }
 
         if (!thread.author) {
             thread.author = {
@@ -297,7 +345,7 @@ const deleteThread = async (req, res, next) => {
             })
         }
 
-        const answers = await Answer.find({ threadId: Types.ObjectId(threadId) })
+        const answers = await Answer.find({ threadId: new Types.ObjectId(threadId) })
         const answersCount = answers.length
         await Promise.all(answers.map(async (item) => {
             const answer = await Answer.findById(item._id)
@@ -323,12 +371,12 @@ const deleteThread = async (req, res, next) => {
                 })
             }
 
-            await answer.delete()
+            await answer.deleteOne()
         }))
 
-        await thread.delete()
+        await thread.deleteOne()
 
-        await Board.updateOne({ _id: Types.ObjectId(thread.boardId) }, {
+        await Board.updateOne({ _id: new Types.ObjectId(thread.boardId) }, {
             $inc: {
                 threadsCount: -1,
                 answersCount: -answersCount
@@ -336,10 +384,8 @@ const deleteThread = async (req, res, next) => {
         })
 
         res.json({ message: 'Thread successfully deleted' })
-
-        req.io.to('thread:' + threadId).emit('threadDeleted', { id: threadId })
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -351,7 +397,12 @@ const clearThread = async (req, res, next) => {
         if (!moder) return next(createHttpError.Unauthorized('Action not allowed'))
         if (!threadId) return next(createHttpError.BadRequest('threadId must not be empty'))
 
-        const thread = await Thread.findById(threadId).populate({ path: 'author', select: 'role' })
+        let thread
+        try {
+            thread = await Thread.findById(threadId).populate({ path: 'author', select: 'role' })
+        } catch (err) {
+            return next(createHttpError.BadRequest('threadId not found'))
+        }
 
         if (!thread.author) {
             thread.author = {
@@ -360,7 +411,7 @@ const clearThread = async (req, res, next) => {
         }
         if (req.payload.role < thread.author.role) return next(createHttpError.Unauthorized('Action not allowed'))
 
-        const answers = await Answer.find({ threadId: Types.ObjectId(threadId) })
+        const answers = await Answer.find({ threadId: new Types.ObjectId(threadId) })
         const answersCount = answers.length
         await Promise.all(answers.map(async (item) => {
             const answer = await Answer.findById(item._id)
@@ -389,14 +440,12 @@ const clearThread = async (req, res, next) => {
             await answer.delete()
         }))
 
-        await Thread.updateOne({ _id: Types.ObjectId(threadId) }, { answersCount: 0 })
-        await Board.updateOne({ _id: Types.ObjectId(thread.boardId) }, { $inc: { answersCount: -answersCount } })
+        await Thread.updateOne({ _id: new Types.ObjectId(threadId) }, { answersCount: 0 })
+        await Board.updateOne({ _id: new Types.ObjectId(thread.boardId) }, { $inc: { answersCount: -answersCount } })
 
         res.json({ message: 'Thread successfully cleared' })
-
-        req.io.to('thread:' + threadId).emit('threadCleared', { id: threadId })
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -405,101 +454,106 @@ const editThread = async (req, res, next) => {
         upload(req, res, async (err) => {
             if (err) return next(createHttpError.BadRequest(err.message))
 
-            const { threadId, title, body, closed } = JSON.parse(req.body.postData)
+            const postDataString = JSON.stringify(req.body);
+            const { threadId, title, body, closed } = JSON.parse(postDataString);
+            let thread;
 
             if (!threadId) return next(createHttpError.BadRequest('threadId must not be empty'))
             if (title.trim() === '') return next(createHttpError.BadRequest('Thread title must not be empty'))
             if (body.trim() === '') return next(createHttpError.BadRequest('Thread body must not be empty'))
 
-            const thread = await Thread.findById(threadId).populate({ path: 'author', select: 'role' })
+            try {
+                thread = await Thread.findById(threadId).populate({ path: 'author', select: 'role' })
 
-            if (!thread.author) {
-                thread.author = {
-                    role: 1
+                if (!thread.author) {
+                    thread.author = {
+                        role: 1
+                    }
                 }
-            }
-            if (req.payload.id !== thread.author._id) {
-                if (req.payload.role < thread.author.role) {
-                    return next(createHttpError.Unauthorized('Action not allowed'))
-                }
-            }
 
-            if (req.files.length && thread.attach && thread.attach.length) {
-                const files = thread.attach.reduce((array, item) => {
-                    if (item.thumb) {
+                if (req.payload.id !== thread.author._id) {
+                    if (req.payload.role < thread.author.role) {
+                        return next(createHttpError.Unauthorized('Action not allowed'))
+                    }
+                }
+
+                if (req.files.length && thread.attach && thread.attach.length) {
+                    const files = thread.attach.reduce((array, item) => {
+                        if (item.thumb) {
+                            return [
+                                ...array,
+                                path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file)),
+                                path.join(__dirname, '..', '..', '..', 'public', 'forum', 'thumbnails', path.basename(item.thumb))
+                            ]
+                        }
+
                         return [
                             ...array,
-                            path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file)),
-                            path.join(__dirname, '..', '..', '..', 'public', 'forum', 'thumbnails', path.basename(item.thumb))
+                            path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file))
                         ]
-                    }
+                    }, [])
 
-                    return [
-                        ...array,
-                        path.join(__dirname, '..', '..', '..', 'public', 'forum', path.basename(item.file))
-                    ]
-                }, [])
-
-                deleteFiles(files, (err) => {
-                    if (err) console.error(err)
-                })
-            }
-
-            let files = thread.attach
-            if (req.files.length) {
-                files = []
-                await Promise.all(req.files.map(async (item) => {
-                    if (videoTypes.find(i => i === item.mimetype)) {
-                        const thumbFilename = item.filename.replace(path.extname(item.filename), '.jpg')
-
-                        await createThumb(item.path, 'forum', thumbFilename)
-
-                        files.push({
-                            file: `/forum/${item.filename}`,
-                            thumb: `/forum/thumbnails/${thumbFilename}`,
-                            type: item.mimetype,
-                            size: item.size
-                        })
-                    } else {
-                        files.push({
-                            file: `/forum/${item.filename}`,
-                            thumb: null,
-                            type: item.mimetype,
-                            size: item.size
-                        })
-                    }
-                }))
-            }
-
-            const obj = {
-                title: title.trim().substring(0, 100),
-                body: body.substring(0, 1000),
-                closed: closed === undefined ? thread.closed : closed,
-                attach: files
-            }
-            if (closed === undefined) {
-                obj.edited = {
-                    createdAt: new Date().toISOString()
+                    deleteFiles(files, (err) => {
+                        if (err) console.error(err)
+                    })
                 }
+
+                let files = thread.attach
+                if (req.files.length) {
+                    files = []
+                    await Promise.all(req.files.map(async (item) => {
+                        if (videoTypes.find(i => i === item.mimetype)) {
+                            const thumbFilename = item.filename.replace(path.extname(item.filename), '.jpg')
+
+                            await createThumb(item.path, 'forum', thumbFilename)
+
+                            files.push({
+                                file: `/forum/${item.filename}`,
+                                thumb: `/forum/thumbnails/${thumbFilename}`,
+                                type: item.mimetype,
+                                size: item.size
+                            })
+                        } else {
+                            files.push({
+                                file: `/forum/${item.filename}`,
+                                thumb: null,
+                                type: item.mimetype,
+                                size: item.size
+                            })
+                        }
+                    }))
+                }
+
+                const obj = {
+                    title: title.trim().substring(0, 100),
+                    body: body.substring(0, 1000),
+                    closed: closed === undefined ? thread.closed : closed,
+                    attach: files
+                }
+                if (closed === undefined) {
+                    obj.edited = {
+                        createdAt: new Date().toISOString()
+                    }
+                }
+
+                await Thread.updateOne({ _id: new Types.ObjectId(threadId) }, obj)
+
+                const populate = [{
+                    path: 'author',
+                    select: '_id name displayName onlineAt picture role ban'
+                }, {
+                    path: 'likes',
+                    select: '_id name displayName picture'
+                }]
+                const editedThread = await Thread.findById(threadId).populate(populate)
+
+                res.json(editedThread)
+            } catch (error) {
+                return next(createHttpError.BadRequest({ message: "threadId not found" }))
             }
-
-            await Thread.updateOne({ _id: Types.ObjectId(threadId) }, obj)
-
-            const populate = [{
-                path: 'author',
-                select: '_id name displayName onlineAt picture role ban'
-            }, {
-                path: 'likes',
-                select: '_id name displayName picture'
-            }]
-            const editedThread = await Thread.findById(threadId).populate(populate)
-
-            res.json(editedThread)
-
-            req.io.to('thread:' + threadId).emit('threadEdited', editedThread)
         })
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -508,7 +562,8 @@ const adminEditThread = async (req, res, next) => {
         upload(req, res, async (err) => {
             if (err) return next(createHttpError.BadRequest(err.message))
 
-            const { threadId, title, body, pined, closed } = JSON.parse(req.body.postData)
+            const postDataString = JSON.stringify(req.body);
+            const { threadId, title, body, pined, closed } = JSON.parse(postDataString);
             const moder = req.payload.role >= 2
 
             if (!moder) return next(createHttpError.Unauthorized('Action not allowed'))
@@ -585,7 +640,7 @@ const adminEditThread = async (req, res, next) => {
                 }
             }
 
-            await Thread.updateOne({ _id: Types.ObjectId(threadId) }, obj)
+            await Thread.updateOne({ _id: new Types.ObjectId(threadId) }, obj)
 
             const populate = [{
                 path: 'author',
@@ -601,7 +656,7 @@ const adminEditThread = async (req, res, next) => {
             req.io.to('thread:' + threadId).emit('threadEdited', editedThread)
         })
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 
@@ -630,10 +685,8 @@ const likeThread = async (req, res, next) => {
         const likedThread = await Thread.findById(threadId).populate(populate)
 
         res.json(likedThread)
-
-        req.io.to('thread:' + threadId).emit('threadLiked', likedThread)
     } catch (err) {
-        next(createHttpError.InternalServerError(err))
+        next(createHttpError.InternalServerError({ message: err.message }))
     }
 }
 export { getBoards, getBoard, createBoard, deleteBoard, editBoard, getRecentlyThreads, getThreads, getThread, createThread, deleteThread, editThread, clearThread, likeThread, adminEditThread };
